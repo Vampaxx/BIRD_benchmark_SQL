@@ -1,0 +1,9 @@
+artifacts_root : artifacts
+
+data_ingestion  : 
+  SQLite_dir      : artifacts/SQLite_database
+  data_dir        : artifacts/data
+  SQLite_database : artifacts/SQLite_database/movies_4.sqlite
+  data_file_path  : artifacts/data/data.json
+  train_file_path : artifacts/data/train_data.json 
+  test_file_path  : artifacts/data/test_data.json
