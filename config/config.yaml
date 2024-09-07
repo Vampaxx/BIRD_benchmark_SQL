@@ -1,9 +1,17 @@
 artifacts_root : artifacts
 
 data_ingestion  : 
+  SQLite_URL      : "https://github.com/Vampaxx/BIRD_benchmark_SQL/blob/main/artifacts/movies_4.sqlite"
   SQLite_dir      : artifacts/SQLite_database
+  SQLite_file     : artifacts/SQLite_database/movies_4.sqlite
+  data_URL        : "https://github.com/Vampaxx/BIRD_benchmark_SQL/blob/main/artifacts/train.json"
   data_dir        : artifacts/data
-  SQLite_database : artifacts/SQLite_database/movies_4.sqlite
-  data_file_path  : artifacts/data/data.json
+  data_file_path  : artifacts/data/train.json
   train_file_path : artifacts/data/train_data.json 
   test_file_path  : artifacts/data/test_data.json
+  few_shots_path  : artifacts/data/few_shots.json
+
+data_processing:
+  train_file_path : artifacts/data/train_data.json 
+  test_file_path  : artifacts/data/test_data.json
+  few_shots_path  : artifacts/data/few_shots.json

@@ -1,1 +1,9 @@
-setup : 5
+K               : 2
+TEMPERATURE     : 0
+TRAIN_SIZE      : 0.7
+TEST_SIZE       : 0.3
+FEW_SHOTS_SIZE  : 12
+db_id           : movies_4
+MODEL_NAME      : llama3-70b-8192
+EMBEDDING_MDOEL : sentence-transformers/all-MiniLM-L6-v2
+

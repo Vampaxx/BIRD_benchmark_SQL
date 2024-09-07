@@ -15,4 +15,4 @@ logging.basicConfig(level= logging.INFO,
                               logging.StreamHandler(sys.stdout)])
 
 
-logger = logging.getLogger("cnnClassifierLogger")
+logger = logging.getLogger("Brid_text_to_SQL")
