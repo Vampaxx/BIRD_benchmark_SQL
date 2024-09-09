@@ -36,7 +36,7 @@ class ConfigurationManager:
 
     def get_data_splitting_config(self) -> DataSplittingConfig:
 
-        config =  self.config.data_processing
+        config =  self.config.data_splitting
         params = self.params 
         logger.info('Data splitting initialized')
         data_procesing_config = DataSplittingConfig(data_file_path     = config.data_file_path,
