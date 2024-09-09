@@ -1,8 +1,11 @@
+import os
+from dotenv import load_dotenv
 from Bird_bench_SQL import logger
 from Bird_bench_SQL.constants import *
 from Bird_bench_SQL.utils.common import read_yaml, create_directories
 from Bird_bench_SQL.entity.config_entity import (DataIngestionConfig,
-                                                 DataSplittingConfig)
+                                                 DataSplittingConfig,
+                                                 DatabaseAndModelConfig)
                                                 #PrepareBaseModelConfig,
                                                 #PrepareCallbacksConfig,
                                                 #TrainingConfig,
@@ -45,15 +48,29 @@ class ConfigurationManager:
                                                      db_id_name         = params.db_id,
                                                      train_size         = params.TRAIN_SIZE,
                                                      test_size          = params.TEST_SIZE) 
-        return data_procesing_config        
+        return data_procesing_config
+
+    def get_database_and_model_config(self) -> DatabaseAndModelConfig:
+        config =  self.config.database_and_model
+        params = self.params 
+        
+        logger.info('Database and model config initialized')
+        load_dotenv()
+        data_procesing_config = DatabaseAndModelConfig(SQLite_database_path = config.database_path,
+                                                       Model_name           = params.MODEL_NAME,
+                                                       temperature          = params.TEMPERATURE,
+                                                       api_key              = os.getenv("GROQ_API_KEY")) 
+        logger.info("database and model config finished") 
+        return data_procesing_config                
     
 
 
     
 if __name__ == "__main__":
     try:
-        config                  = ConfigurationManager()
-        data_processing_config  = config.get_data_splitting_config()
+        config                      = ConfigurationManager()
+        data_processing_config      = config.get_data_splitting_config()
+        database_and_model_config   = config.get_database_and_model_config()
 
     except Exception as e:
         raise e

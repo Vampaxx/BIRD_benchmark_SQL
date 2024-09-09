@@ -16,3 +16,6 @@ data_splitting:
   train_file_path : artifacts/data/train_data.json 
   test_file_path  : artifacts/data/test_data.json
   few_shots_path  : artifacts/data/few_shots.json
+
+database_and_model:
+  database_path : artifacts/SQLite_database/movies_4.sqlite
