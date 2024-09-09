@@ -10,3 +10,13 @@ class DataIngestionConfig:
     data_URL        : str 
     data_dir        : Path
     data_file_path  : Path
+
+
+@dataclass(frozen=True)
+class DataSplittingConfig:
+    data_file_path  : Path
+    train_file_path : Path
+    test_file_path  : Path 
+    db_id_name      : str 
+    train_size      : int
+    test_size       : int

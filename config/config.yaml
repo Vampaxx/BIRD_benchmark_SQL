@@ -12,6 +12,7 @@ data_ingestion  :
   few_shots_path  : artifacts/data/few_shots.json
 
 data_processing:
+  data_file_path  : artifacts/data/train.json
   train_file_path : artifacts/data/train_data.json 
   test_file_path  : artifacts/data/test_data.json
   few_shots_path  : artifacts/data/few_shots.json

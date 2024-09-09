@@ -1,5 +1,4 @@
 import os
-import zipfile
 import urllib.request as request
 from Bird_bench_SQL import logger
 from Bird_bench_SQL.entity.config_entity import DataIngestionConfig

@@ -36,8 +36,8 @@ def create_directories(path_to_directories: list, verbose=True):
 
 
 @ensure_annotations
-def save_json(path: Path, data: dict):
-    with open(path, "w") as f:
+def save_json(path:str, data: list):
+    with open(Path(path), "w") as f:
         json.dump(data, f, indent=4)
 
     logger.info(f"json file saved at: {path}")
@@ -46,11 +46,15 @@ def save_json(path: Path, data: dict):
 
 
 @ensure_annotations
-def load_json(path: Path) -> ConfigBox:
-    with open(path) as f:
-        content = json.load(f)
+def load_json(file_path):
+    with open (Path(file_path),"r") as file:
+        text_sql_data = json.load(file)
 
-    logger.info(f"json file loaded succesfully from: {path}")
-    return ConfigBox(content)
+    logger.info(f"json file loaded succesfully from: {file_path}")
+    if isinstance(text_sql_data, list):  # Ensuring the content is a list of dictionaries
+        wrapped_content = [ConfigBox(item) for item in text_sql_data]
+    return wrapped_content
+
+
 
 

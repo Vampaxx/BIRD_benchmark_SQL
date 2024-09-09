@@ -1,0 +1,290 @@
+[
+    {
+        "db_id": "movies_4",
+        "question": "Among the movie in which Dariusz Wolski works as the director of photography, what is the title of the one with the highest average vote?",
+        "evidence": "director of photography refers to job = 'Director of Photography'; highest average vote refers to max(vote_average)",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Dariusz Wolski' AND T2.job = 'Director of Photography' ORDER BY T1.vote_average DESC LIMIT 1"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List the film with the highest budget in each genre.",
+        "evidence": "highest budget refers to max(budget); each genre refers to genre_name; film also means movie; list the film refers to title of movie",
+        "SQL": "SELECT T3.genre_name, MAX(T1.budget) FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id GROUP BY T3.genre_name"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What was David Rubin's job in the movie \"Days of Thunder\"?",
+        "evidence": "\"Days of Thunder\" refers to title = 'Days of Thunder'",
+        "SQL": "SELECT T2.job FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'David Rubin' AND T1.title = 'Days of Thunder'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Which movie did the company 'Radiant Film GmbH' work on?",
+        "evidence": "Which movie refers to title; company 'Radiant Film GmbH' refers to company_name = 'Radiant Film GmbH'",
+        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Radiant Film GmbH'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Give the genre and popularity of movies whose revenue is at least 120,000,000 between 2012 and 2015.",
+        "evidence": "genre refers to genre_name; revenue is at least 120,000,000 refers to revenue > = 120000000; between 2012 and 2015 refers to release_date BETWEEN '2012-01-01' AND '2015-12-31'",
+        "SQL": "SELECT T3.genre_name, T1.popularity FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T1.revenue > 120000000 AND T1.release_date BETWEEN '2012-01-01' AND '2015-12-31'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Find out the popularity of the movies with the highest vote count.",
+        "evidence": "highest vote count refers to max(vote_count)",
+        "SQL": "SELECT popularity FROM movie ORDER BY vote_COUNT DESC LIMIT 1"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What was the job of Dariusz Wolski in the movie \"Pirates of the Caribbean: At World's End\"?",
+        "evidence": "movie \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
+        "SQL": "SELECT T2.job FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End' AND T3.person_name = 'Dariusz Wolski'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Are there any post-production movies in Nederlands?",
+        "evidence": "post-production movies refers to movie_status = 'Post Production'; Nederlands refers to language_name = 'Nederlands';",
+        "SQL": "SELECT DISTINCT CASE WHEN T1.movie_status = 'Post Production' THEN 'YES' ELSE 'NO' END AS YORN FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Nederlands'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Provide the title of the movie that is most-liked by a large number of people.",
+        "evidence": "most-liked by a large number of people refers to max(popularity)",
+        "SQL": "SELECT title FROM movie ORDER BY popularity DESC LIMIT 1"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the ratio between male and female cast members of the movie 'Iron Man?' Count how many have unspecified genders.",
+        "evidence": "male refers to gender = 'Male'; female refers to gender = 'Female'; movie 'Iron Man' refers to title = 'Iron Man'; ratio = divide(sum(gender = 'Female'), sum(gender = 'Male'))",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T3.gender = 'Male' THEN 1 ELSE NULL END) AS REAL) / COUNT(CASE WHEN T3.gender = 'Female' THEN 1 ELSE NULL END) AS RATIO , COUNT(CASE WHEN T3.gender = 'Unspecified' THEN 1 ELSE NULL END) AS UNGENDERS FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN gender AS T3 ON T2.gender_id = T3.gender_id WHERE T1.title = 'Iron Man'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many movies released in 1995 did Quentin Tarantino appear in?",
+        "evidence": "released in 1995 refers to release_date LIKE '1995%'",
+        "SQL": "SELECT COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Quentin Tarantino' AND CAST(STRFTIME('%Y', T1.release_date) AS INT) = 1995"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List the movies in the Somali language.",
+        "evidence": "List the movies refers to title; Somali language refers to language_name = 'Somali'",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Somali'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the title of the first crime movie ever released?",
+        "evidence": "first crime movie ever released refers to min(release_date) and genre_name = 'Crime'",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T3.genre_name = 'Crime' ORDER BY T1.release_date LIMIT 1"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Among the movie in which Dariusz Wolski works as the director of photography, what is the percentage of those movie whose vote average is over 5.0?",
+        "evidence": "director of photography refers to job = 'Director of Photography'; vote average is over 8.0 refers to vote_average > 5; percentage = divide(sum(movie_id) when vote_average > 5, count(movie_id)) as percentage",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T1.vote_average > 5 THEN 1 ELSE NULL END) AS REAL) * 100 / COUNT(T1.vote_average) FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Dariusz Wolski' AND T2.job = 'Director of Photography'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many animators does Movie No. 129 have?",
+        "evidence": "animators refers to job = 'Animation'; Movie No. 129 refers to movie_id = 129",
+        "SQL": "SELECT COUNT(movie_id) FROM movie_crew WHERE movie_id = 129 AND job = 'Animation'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "When was the release date of the latest movie in which Dariusz Wolski worked as a crew member?",
+        "evidence": "release date of the latest movie refers to max(release_date)",
+        "SQL": "SELECT T1.release_date FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Dariusz Wolski' ORDER BY T1.release_date DESC LIMIT 1"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the average revenue of the movie in which Dariusz Wolski works as the director of photography?",
+        "evidence": "director of photography refers to job = 'Director of Photography'; average revenue = divide(sum(revenue), count(movie_id))",
+        "SQL": "SELECT CAST(SUM(T1.revenue) AS REAL) / COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Dariusz Wolski' AND T2.job = 'Director of Photography'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "State the genre of the movie title with a runtime of only 14 minutes.",
+        "evidence": "genre refers to genre_name; runtime of only 14 minutes refers to runtime = 14",
+        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T1.runtime = 14"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Find the difference in percentage of the movies under keywords of \"woman director\" and \"independent film\".",
+        "evidence": "under keywords of \"woman director\" and \"independent film\" refers to keyword_name = 'woman director' and keyword_name = 'independent film'; difference in percentage = divide(subtract(count(movie_id) when keyword_name = 'woman director', count(movie_id) when keyword_name = 'independent film'), count(movie_id)) as percentage",
+        "SQL": "SELECT CAST((SUM(CASE WHEN T1.keyword_name = 'woman director' THEN 1 ELSE 0 END) - SUM(CASE WHEN T1.keyword_name = 'independent film' THEN 1 ELSE 0 END)) AS REAL) * 100 / SUM(CASE WHEN T1.keyword_name = 'independent film' THEN 1 ELSE 0 END) FROM keyword AS T1 INNER JOIN movie_keywords AS T2 ON T1.keyword_id = T2.keyword_id"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Which production company produced the movie that made the most money at the box office?",
+        "evidence": "Which production company refers to company_name; most money at the box office refers to max(revenue)",
+        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id GROUP BY T1.company_id ORDER BY SUM(T3.revenue) DESC LIMIT 1"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List the character names in the \"Open Water\" movie.",
+        "evidence": "\"Open Water\" movie refers to title = 'Open Water'",
+        "SQL": "SELECT T2.character_name FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'Open Water'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the genre of the movie title which was well-received by the audiences but made the lowest revenue?",
+        "evidence": "genre refers to genre_name; well-received by the audiences refers to max(vote_average); lowest revenue refers to min(revenue)",
+        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id ORDER BY T1.vote_average DESC, T1.revenue LIMIT 1"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What keyword can the user use to search for the movie Finding Nemo?",
+        "evidence": "What keyword refers to keyword_name; Finding Nemo refers to title = 'Finding Nemo'",
+        "SQL": "SELECT T3.keyword_name FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T1.title = 'Finding Nemo'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many female crews are in the movie \"Mr. Smith Goes to Washington\"?",
+        "evidence": "female crews refers to gender = 'Female'; \"Mr. Smith Goes to Washington\" refers to title = 'Mr. Smith Goes to Washington'",
+        "SQL": "SELECT COUNT(T3.gender) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN gender AS T3 ON T2.gender_id = T3.gender_id WHERE T1.title = 'Mr. Smith Goes to Washington' AND T3.gender = 'Female'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many production companies does the movie \"Four Rooms\" have?",
+        "evidence": "movie \"Four Rooms\" refers to title = 'Four Rooms'",
+        "SQL": "SELECT COUNT(CNAME) FROM ( SELECT T1.company_name AS CNAME FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T3.title = 'Four Rooms' )"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "The movie 'Gojira ni-sen mireniamu' is from which country?",
+        "evidence": "movie 'Gojira ni-sen mireniamu' refers to title = 'Gojira ni-sen mireniamu'; which country refers to country_name",
+        "SQL": "SELECT T3.COUNTry_name FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE T1.title = 'Gojira ni-sen mireniamu'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Provide the overview for the movie \"The Pacifier\".",
+        "evidence": "movie \"The Pacifier\" refers to title = 'The Pacifier'",
+        "SQL": "SELECT overview FROM movie WHERE title = 'The Pacifier'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many films released between 1/2/1990 and 12/30/2000 starred Uma Thurman?",
+        "evidence": "released between 1/2/1990 and 12/30/2000 refers to release_date BETWEEN '1990-01-02' AND '2000-12-30'; film has the same meaning as movie; starred Uma Thurman refers to person_name = 'Uma Thurman'",
+        "SQL": "SELECT COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Uma Thurman' AND T1.release_date BETWEEN '1990-01-01' AND '2000-12-31'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Calculate the revenues made by Fantasy Films and Live Entertainment.",
+        "evidence": "made by Fantasy Films refers to company_name = 'Fantasy Films'; Live Entertainment refers to company_name = 'Live Entertainment'",
+        "SQL": "SELECT SUM(T3.revenue) FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name IN ('Fantasy Films', 'Live Entertainment')"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many production companies made more than 150 movies?",
+        "evidence": "more than 150 movies refers to COUNT(company_name) > 150",
+        "SQL": "SELECT COUNT(*) FROM ( SELECT T1.company_name AS CNAME FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id GROUP BY T1.company_id HAVING COUNT(T1.company_name) > 150 )"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Write the person ID and character name of casts between order numbers 1 and 10 in Movie No. 285.",
+        "evidence": "casts between order numbers 1 and 10 refers to cast_order BETWEEN 2 AND 9; Movie No. 285 refers to movie_id = 285",
+        "SQL": "SELECT person_id, character_name FROM movie_cast WHERE movie_id = 285 AND cast_order BETWEEN 1 AND 10"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List the names of all the producers in the movie \"Pirates of the Caribbean: At World's End\".",
+        "evidence": "List the names refers to person_name; producers refers to job = 'Producer'; \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: The Curse of the Black Pearl'",
+        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title = 'Pirates of the Caribbean: The Curse of the Black Pearl' AND T2.job = 'Producer'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List the movies released in 1945.",
+        "evidence": "List the movies refers to title; released in 1945 refers to release_date LIKE '1945%'",
+        "SQL": "SELECT title FROM movie WHERE CAST(STRFTIME('%Y', release_date) AS INT) = 1945"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many Indian movies between 1/2/1990 and 12/30/2003 have revenue of more than 75,000,000 and popularity of no less than 20?",
+        "evidence": "Indian movies refers to country_name = 'India'; between 1/2/1990 and 12/30/2003 refers to release_date BETWEEN '1990-01-02' AND '2003-12-30'; revenue of more than 75,000,000 refers to revenue > 75000000; popularity of no less than 20 refers to popularity > = 20",
+        "SQL": "SELECT COUNT(T2.movie_id) FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id WHERE T1.revenue > 75000000 AND T1.popularity >= 20 AND T1.release_date BETWEEN '1990-01-01' AND '2003-12-31'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List the director's name of the movies released between 1/01/1916 and 12/31/1925.",
+        "evidence": "director's name refers to person_name where job = 'Director'; released between 1/01/1916 and 12/31/1925 refers to release_date BETWEEN '1916-01-02' AND '1925-12-30'",
+        "SQL": "SELECT T2.person_name FROM movie_cast AS T1 INNER JOIN person AS T2 ON T1.person_id = T2.person_id INNER JOIN movie AS T3 ON T1.movie_id = T3.movie_id INNER JOIN movie_crew AS T4 ON T1.movie_id = T4.movie_id WHERE T4.job = 'Director' AND T3.release_date BETWEEN '1916-01-01' AND '1925-12-31'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the production company of the movie \"Crazy Heart\"?",
+        "evidence": "movie \"Crazy Heart\" refers to title = 'Crazy Heart'; production company refers to company_name",
+        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T3.title = 'Crazy Heart'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many crew members worked as producer in the movie \"Pirates of the Caribbean: At World's End\"?",
+        "evidence": "worked as producer refers to job = 'Producer'; \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
+        "SQL": "SELECT COUNT(T3.person_id) FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End' AND T2.job = 'Producer'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Please list the names of all the producers in the movie \"Pirates of the Caribbean: At World's End\".",
+        "evidence": "names refers to person_name; producers refers to job = 'Producer'; \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
+        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End' AND T2.job = 'Producer'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the average revenue made by Latin movies?",
+        "evidence": "Latin movies refers to language_name = 'Latin'; average revenue = AVG(revenue)",
+        "SQL": "SELECT AVG(T1.revenue) FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Latin'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many producers does the movie \"The Amityville Horror\" have?",
+        "evidence": "producers refers to job = 'Producer'; \"The Amityville Horror\" refers to title = 'The Amityville Horror'",
+        "SQL": "SELECT COUNT(T2.person_id) FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'The Amityville Horror' AND T2.job = 'Producer'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Provide the names and departments of the person who worked as a music editor in the \"Pirates of the Caribbean: At World's End\" movie.",
+        "evidence": "names refers to person_name; departments refers to department_name; worked as a music editor refers to job = 'Music Editor'; \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
+        "SQL": "SELECT T3.person_name, T4.department_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id INNER JOIN department AS T4 ON T2.department_id = T4.department_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End' AND T2.job = 'Music Editor'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "For the movie \"Reign of Fire\", which department was Marcia Ross in?",
+        "evidence": "movie \"Reign of Fire\" refers to title = 'Reign of Fire'; which department refers to department_name",
+        "SQL": "SELECT T4.department_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id INNER JOIN department AS T4 ON T2.department_id = T4.department_id WHERE T3.person_name = 'Marcia Ross' AND T1.title = 'Reign of Fire'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the name of the production company that made the most movies?",
+        "evidence": "name of the production company refers to company_name; most movies refers to max(count(company_name))",
+        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id GROUP BY T1.company_id ORDER BY COUNT(T2.movie_id) DESC LIMIT 1"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Write the titles of horror films with a vote average of more than 7.",
+        "evidence": "horror films refers to genre_name = 'Horror'; vote average of more than 7 refers to vote_average > 7",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T3.genre_name = 'Horror' AND vote_average > 7"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the average revenue of American movies in 2006?",
+        "evidence": "American movies refers to country_name = 'United States of America'; in 2006 refers to release_date LIKE '2006%'; average revenue = AVG(revenue)",
+        "SQL": "SELECT AVG(T1.revenue) FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE T3.COUNTry_name = 'United States of America' AND CAST(STRFTIME('%Y', T1.release_date) AS INT) = 2006"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Write all the keywords belonging to the movie 'Sky Captain and the World of Tomorrow.'",
+        "evidence": "keywords refers to keyword_name; movie 'Sky Captain and the World of Tomorrow' refers to title = 'Sky Captain and the World of Tomorrow'",
+        "SQL": "SELECT T3.keyword_name FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T1.title = 'Sky Captain and the World of Tomorrow'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Please list the names of all the crew members of the movie \"Pirates of the Caribbean: At World's End\".",
+        "evidence": "names refers to person_name; \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
+        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End'"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the percentage of male characters in the movie \"Bride Wars\"?",
+        "evidence": "male refers to gender = 'Male'; \"Bride Wars\" refers to title = 'Bride Wars'; percentage = divide(sum(gender = 'Male'), count(gender)) * 100 as percentage",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T3.gender = 'Male' THEN 1 ELSE NULL END) AS REAL) * 100 / COUNT(T3.gender) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN gender AS T3 ON T2.gender_id = T3.gender_id WHERE T1.title = 'Bride Wars'"
+    }
+]
