@@ -1,662 +1,772 @@
 [
     {
         "db_id": "movies_4",
-        "question": "What is the original language of the movie with the tagline \"An offer you can't refuse.\"?",
-        "evidence": "language refers to language_name; original language refers to language_role = 'Original'",
-        "SQL": "SELECT T3.language_name FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id INNER JOIN language_role AS T4 ON T2.language_role_id = T4.role_id WHERE T4.language_role = 'Original' AND T1.tagline LIKE 'An offer you can%t refuse.'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "In Movie No. 19, how many people are there in Department No. 7? Please give me their job.",
-        "evidence": "Movie No. 19 refers to movie_id = 19; Department No. 7 refers to department_id = 7",
-        "SQL": "SELECT COUNT(DISTINCT job) FROM movie_crew WHERE movie_id = 19 AND department_id = 7"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "How many movies did Universal Studios release?",
-        "evidence": "Universal Studios refers to company_name = 'Universal Studios'",
-        "SQL": "SELECT COUNT(T2.movie_id) FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id WHERE T1.company_name = 'Universal Studios'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "For the movie \"Land of the Dead\", who is its director?",
-        "evidence": "\"Land of the Dead\" refers to title = 'Land of the Dead'; director refers to person_name where job = 'Director'",
-        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title = 'Land of the Dead' AND T2.job = 'Director'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "How many movies were produced in Canada?",
-        "evidence": "produced in Canada refers to country_name = 'Canada'",
-        "SQL": "SELECT COUNT(T2.movie_id) FROM COUNTry AS T1 INNER JOIN production_COUNTry AS T2 ON T1.COUNTry_id = T2.COUNTry_id WHERE T1.COUNTry_name = 'Canada'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Which actor plays Optimus Prime?",
-        "evidence": "Which actor refers to person_name; Optimus Prime refers to character_name = 'Optimus Prime (voice)'",
-        "SQL": "SELECT DISTINCT T1.person_name FROM person AS T1 INNER JOIN movie_cast AS T2 ON T1.person_id = T2.person_id WHERE T2.character_name = 'Optimus Prime (voice)'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Provide the genre of a movie title with a tagline of \"A long time ago in a galaxy far, far away\u2026\".",
-        "evidence": "genre refers to genre_name; tagline of \"A long time ago in a galaxy far, far away\u2026\" refers to tagline = 'A long time ago in a galaxy far, far away\u2026'",
-        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T3.genre_id = T2.genre_id WHERE T1.tagline = 'A long time ago in a galaxy far, far away...'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the title of the movie with the most keywords?",
-        "evidence": "most keywords refers to max(count(keyword_id))",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id GROUP BY T1.title ORDER BY COUNT(T2.keyword_id) DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the original language of the \"Four Rooms\" movie?",
-        "evidence": "language refers to language_name; original language refers to language_role = 'Original'; \"Four Rooms\" refers to title = 'Four Rooms'",
-        "SQL": "SELECT T3.language_name FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id INNER JOIN language_role AS T4 ON T2.language_role_id = T4.role_id WHERE T4.language_role = 'Original' AND T1.title = 'Four Rooms'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Which movie has the keyword 'extremis?'",
-        "evidence": "Which movie refers to title; keyword 'extremis' refers to keyword_name = 'extremis'",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T3.keyword_name = 'extremis'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Provide the titles and revenues of the movies produced by the DreamWorks company.",
-        "evidence": "produced by the DreamWorks company refers to company_name = 'DreamWorks'",
-        "SQL": "SELECT T1.title, T1.revenue FROM movie AS T1 INNER JOIN movie_company AS T2 ON T1.movie_id = T2.movie_id INNER JOIN production_company AS T3 ON T2.company_id = T3.company_id WHERE T3.company_name = 'DreamWorks'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "How many movies have made at least 1 Billion at the box office?",
-        "evidence": "have made at least 1 Billion at the box office refers to revenue > 1000000000",
-        "SQL": "SELECT COUNT(movie_id) FROM movie WHERE revenue > 1000000000"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Among Warner Bros. Pictures' movies, which title made the highest revenue?",
-        "evidence": "Warner Bros. Pictures' movies refers to company_name = 'Warner Bros. Pictures'; highest revenue refers to max(revenue)",
-        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Warner Bros. Pictures' ORDER BY T3.revenue DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Show the total number of keywords of the movie \"I Hope They Serve Beer in Hell\".",
-        "evidence": "\"I Hope They Serve Beer in Hell\" refers to title = 'I Hope They Serve Beer in Hell';",
-        "SQL": "SELECT COUNT(T2.keyword_id) FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'I Hope They Serve Beer in Hell'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the ID of the production company which produced the movie \"Gladiator\"?",
-        "evidence": "ID of the production company refers to company_id; movie \"Gladiator\" refers to title = 'Gladiator'",
-        "SQL": "SELECT T2.company_id FROM movie AS T1 INNER JOIN movie_company AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'Gladiator'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Which movies have the participation of actor Harrison Ford?",
-        "evidence": "Which movies refers to title; actor refers to person_name",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Harrison Ford'"
-    },
-    {
-        "db_id": "movies_4",
         "question": "Please list the names of the production company of the movie \"Four Rooms\".",
         "evidence": "names of the production company refers to movie_company; movie \"Four Rooms\" refers to title = 'Four Rooms'",
-        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T3.title = 'Four Rooms'"
+        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T3.title = 'Four Rooms'",
+        "Answer": "Miramax Films,A Band Apart"
     },
     {
         "db_id": "movies_4",
-        "question": "List 10 crews alongside their jobs who worked on the movie 'Mad Max: Fury Road.'",
-        "evidence": "crews refers to person_name; movie 'Mad Max: Fury Road' refers to title = 'Mad Max: Fury Road'",
-        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title = 'Mad Max: Fury Road' LIMIT 10"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the title of Jamie Foxx's most recent movie?",
-        "evidence": "most recent movie refers to max(release_date)",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Jamie Foxx' ORDER BY T1.release_date DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the gender of the character 'USAF Master Sgt. Epps?'",
-        "evidence": "character 'USAF Master Sgt. Epps' refers to character_name = 'USAF Master Sgt. Epps'",
-        "SQL": "SELECT T2.gender FROM movie_cast AS T1 INNER JOIN gender AS T2 ON T1.gender_id = T2.gender_id WHERE T1.character_name = 'USAF Master Sgt. Epps'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Tell the language of the movie \"C'era una volta il West\".",
-        "evidence": "language refers to language_name; movie \"C'era una volta il West\" refers to title = 'C''era una volta il West'",
-        "SQL": "SELECT T3.language_name FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T1.title LIKE 'C%era una volta il West'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Name the horror movies with positive ratings greater than 7.",
-        "evidence": "Name the horror movies refers to title where genre_name = 'horror'; positive ratings greater than 7 refers to vote_average > 7",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T3.genre_name = 'Horror' AND T1.vote_average > 7"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "How many movies were produced by \"Eddie Murphy Productions\"?",
-        "evidence": "produced by \"Eddie Murphy Productions\" refers to company_name = 'Eddie Murphy Productions'",
-        "SQL": "SELECT COUNT(T1.movie_id) FROM movie_company AS T1 INNER JOIN production_company AS T2 ON T1.company_id = T2.company_id WHERE T2.company_name = 'Eddie Murphy Productions'"
+        "question": "How many production companies does the movie \"Four Rooms\" have?",
+        "evidence": "movie \"Four Rooms\" refers to title = 'Four Rooms'",
+        "SQL": "SELECT COUNT(CNAME) FROM ( SELECT T1.company_name AS CNAME FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T3.title = 'Four Rooms' )",
+        "Answer": "2"
     },
     {
         "db_id": "movies_4",
         "question": "Please list the titles of all the movie produced by production company \"Universal Pictures\".",
         "evidence": "\"Universal Pictures\" refers to company_name = 'Universal Pictures'",
-        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Universal Pictures'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Tell the number of movies made by Paramount Animation.",
-        "evidence": "Paramount Animation refers to company_name = 'Paramount Animation'",
-        "SQL": "SELECT COUNT(T2.movie_id) FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id WHERE T1.company_name = 'Paramount Animation'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the average ratio between female and male actors in a movie?",
-        "evidence": "female refers to gender = 'Female'\uff1bmale refers to gender = 'Male'; average ratio = divide(divide(sum(gender_id) when gender = 'Female', sum(gender_id) when gender = 'Male'), count(movie_id)) as percentage",
-        "SQL": "SELECT CAST(COUNT(CASE WHEN T2.gender = 'Female' THEN T1.person_id ELSE NULL END) AS REAL) / COUNT(CASE WHEN T2.gender = 'Male' THEN T1.person_id ELSE NULL END) FROM movie_cast AS T1 INNER JOIN gender AS T2 ON T1.gender_id = T2.gender_id"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Provide the homepage of the Bahasa Indonesia movies.",
-        "evidence": "Bahasa Indonesia movies refers to language_name = 'Bahasa indonesia'",
-        "SQL": "SELECT DISTINCT T1.homepage FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Bahasa indonesia'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List the genres of Forrest Gump movie.",
-        "evidence": "genres refers to genre_name; Forrest Gump movie refers to title = 'Forrest Gump'",
-        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T1.title = 'Forrest Gump'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "How many movies have \"vi\" as their language code?",
-        "evidence": "\"vi\" as their language code refers to language_code = 'vi'",
-        "SQL": "SELECT COUNT(T1.movie_id) FROM movie_languages AS T1 INNER JOIN language AS T2 ON T1.language_id = T2.language_id WHERE T2.language_code = 'vi'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List the title of movies in Latin released between 1/01/1990 and 12/31/1995.",
-        "evidence": "movies in Latin refers to language_name = 'Latin'; released between 1/01/1990 and 12/31/1995 refers to release_date BETWEEN '1990-01-01' AND '1995-12-31'",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Latin' AND T1.release_date BETWEEN '1990-01-01' AND '1995-12-31'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List all companies who worked in the movie 'Ultramarines: A Warhammer 40,000 Movie.'",
-        "evidence": "all companies refers to company_name; movie 'Ultramarines: A Warhammer 40,000 Movie' refers to title = 'Ultramarines: A Warhammer 40,000 Movie'",
-        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T3.title = 'Ultramarines: A Warhammer 40,000 Movie'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What are the genres of Sky Captain and the World of Tomorrow?",
-        "evidence": "genres refers to genre_name; Sky Captain and the World of Tomorrow refers to title = 'Sky Captain and the World of Tomorrow'",
-        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T1.title = 'Sky Captain and the World of Tomorrow'"
+        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Universal Pictures'",
+        "Answer": "Jarhead,Gladiator,Back to the Future,Scarface,O Brother, Where Art Thou?,Back to the Future Part II,The Interpreter,Back to the Future Part III,About a Boy,King Kong,Meet Joe Black,Bruce Almighty,Jurassic Park,The Lost World: Jurassic Park,Inside Man,Schindler's List,A Beautiful Mind,Love Actually,Casino,The Blues Brothers,Psycho,Apollo 13,Frenzy,Jaws,Jaws 2,Jaws: The Revenge,2 Fast 2 Furious,To Kill a Mockingbird,E.T. the Extra-Terrestrial,Out of Africa,Munich,Bridget Jones's Diary,Twister,Meet the Fockers,Shaun of the Dead,Army of Darkness,Silent Running,Videodrome,American Graffiti,The Flintstones,The Flintstones in Viva Rock Vegas,Cinderella Man,Do the Right Thing,Kindergarten Cop,The Thing,Because I Said So,Out of Sight,Spy Game,The Holiday,Meet the Parents,Cape Fear,Liar Liar,Ray,Captain Corelli's Mandolin,The Incredible Hulk,The Mummy Returns,The Mummy: Tomb of the Dragon Emperor,You, Me and Dupree,Fear and Loathing in Las Vegas,Hulk,Shakespeare in Love,American Pie,Topaz,The Bourne Identity,The Bourne Supremacy,The Bourne Ultimatum,Born on the Fourth of July,House of 1000 Corpses,Evan Almighty,40 Days and 40 Nights,American Pie 2,U-571,Atonement,Pride & Prejudice,The Kingdom,Seabiscuit,Elizabeth: The Golden Age,Hot Fuzz,Southland Tales,The Jackal,Leatherheads,Knocked Up,American Gangster,Torn Curtain,Family Plot,The Family Man,Cat People,Charlie Wilson's War,The 40 Year Old Virgin,Smokin' Aces,The Wolfman,American Wedding,They Live,How High,Definitely, Maybe,Animal House,Master and Commander: The Far Side of the World,Timecop,Mercury Rising,Casper,DragonHeart,The Shadow,How the Grinch Stole Christmas,Wanted,The River Wild,Midnight Run,The Guru,Slither,Tales from the Crypt: Demon Knight,Sgt. Bilko,Blue Crush,The Sting,American Dreamz,The Nutty Professor,The Scorpion King,Tremors,Death Becomes Her,Conan the Barbarian,Primary Colors,The Bone Collector,Johnny English,Half Baked,Twins,Red Dragon,Babe,Happy Gilmore,The Fast and the Furious: Tokyo Drift,Dante's Peak,The Black Dahlia,Children of Men,The Break-Up,The Fast and the Furious,Bridget Jones: The Edge of Reason,Waterworld,Let's Go to Prison,Mystery Men,United 93,Forgetting Sarah Marshall,Man of the Year,The Skeleton Key,Legal Eagles,Curious George,Kicking & Screaming,Honey,Dragonfly,Cry_Wolf,The Rundown,Snow Falling on Cedars,Patch Adams,D-Tox,For Love of the Game,Angela's Ashes,The Hurricane,Death Race,The Andromeda Strain,The Cat in the Hat,Howard the Duck,Halloween III: Season of the Witch,The Watcher,The Relic,The Last Temptation of Christ,Child's Play 2,Daylight,Hellboy II: The Golden Army,Nanny McPhee,Public Enemies,Bowfinger,Edtv,The Skulls,Firestarter,Frost/Nixon,1941,Small Soldiers,The Life of David Gale,Mamma Mia!,Street Fighter,Land of the Dead,Intolerable Cruelty,The Deer Hunter,White Noise,Wimbledon,Big Fat Liar,High Plains Drifter,Bride of Chucky,Nutty Professor II: The Klumps,The Land Before Time,The Story of Us,Undercover Brother,Cry Freedom,Georgia Rule,Fast Times at Ridgemont High,Welcome Home Roscoe Jenkins,Raising Cain,Beyond the Mat,Flash of Genius,Phantasm II,Role Models,The Perfect Man,Connie and Carla,The Best Man,Serenity,The Best Little Whorehouse in Texas,Duplicity,Coal Miner's Daughter,Inglourious Basterds,Drag Me to Hell,State of Play,The Emperor's Club,The Soloist,Dudley Do-Right,The Adventures of Rocky & Bullwinkle,A Simple Wish,Land of the Lost,Br\u00fcno,The Boat That Rocked,Josie and the Pussycats,Screwed,Couples Retreat,Despicable Me,Robin Hood,Funny People,Nighthawks,Ride with the Devil,Scott Pilgrim vs. the World,The Fourth Kind,It's Complicated,Green Zone,Cirque du Freak: The Vampire's Assistant,The Wiz,The Four Seasons,Leap Year,Love Happens,Repo Men,Get Him to the Greek,Crooklyn,Nanny McPhee and the Big Bang,Flipper,Charlie St. Cloud,The Adjustment Bureau,Your Highness,Sorcerer,Little Fockers,Paul,Caravans,Mo' Better Blues,Sweet Charity,Devil,The Dilemma,Battleship,Sanctum,Dracula Untold,The Bourne Legacy,The Change-Up,R.I.P.D.,Hop,Fast Five,One True Thing,Bridesmaids,Johnny English Reborn,Snow White and the Huntsman,Tower Heist,Kick-Ass 2,Larry Crowne,Safe House,Warcraft,American Reunion,Ted,The Five-Year Engagement,Heartbeeps,Isn't She Great,Oblivion,Contraband,Big Miracle,Les Mis\u00e9rables,Despicable Me 2,Anna Karenina,Dumb and Dumber To,The World's End,Mama,Dallas Buyers Club,The Purge,Furious 7,Ride Along,Lone Survivor,Neighbors,Blackhat,Viy,Minions,Ted 2,Endless Love,The Purge: Anarchy,Lucy,The Boy Next Door,Ouija,Everest,Pitch Perfect 2,As Above, So Below,Hail, Caesar!,Trainwreck,Straight Outta Compton,Krampus,The Huntsman: Winter's War"
     },
     {
         "db_id": "movies_4",
         "question": "What is the title of the latest released movie produced by production company \"Universal Pictures\"?",
         "evidence": "\"Universal Pictures\" refers to company_name = 'Universal Pictures'; latest released refers to max(release_date)",
-        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Universal Pictures' ORDER BY T3.release_date DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Write down the release date of the movies produced by Twentieth Century Fox Film Corporation.",
-        "evidence": "produced by Twentieth Century Fox Film Corporation refers to company_name = 'Twentieth Century Fox Film Corporation'",
-        "SQL": "SELECT T3.release_date FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Twentieth Century Fox Film Corporation'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Give the names of the female cast in Movie No. 1865.",
-        "evidence": "female cast refers to gender = 'Female'; name of cast refers to person_name; Movie No. 1865 refers to movie_id = 1865",
-        "SQL": "SELECT T2.person_name FROM movie_cast AS T1 INNER JOIN person AS T2 ON T1.person_id = T2.person_id INNER JOIN gender AS T3 ON T1.gender_id = T3.gender_id WHERE T1.movie_id = 1865 AND T3.gender = 'Female'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "How many crew are named John Young?",
-        "evidence": "",
-        "SQL": "SELECT COUNT(person_id) FROM person WHERE person_name = 'John Young'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What percentage of films are made in the US?",
-        "evidence": "films' and 'movies' are synonyms; made in the US refers to country_iso_code = 'US'; percentage = divide(sum(country_id) when country_iso_code = 'US', count(country_id)) * 100 as percentage",
-        "SQL": "SELECT CAST(COUNT(CASE WHEN T3.COUNTry_iso_code = 'US' THEN T1.movie_id ELSE NULL END) AS REAL) * 100 / COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Give the name of the movie with a revenue of 559852396.",
-        "evidence": "name of the movie refers to title; revenue of 559852396 refers to revenue = '559852396'",
-        "SQL": "SELECT title FROM movie WHERE revenue = 559852396"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Which genre does the movie Dancer in the Dark belong to?",
-        "evidence": "genre refers to genre_name; movie Dancer in the Dark refers to title = 'Dancer in the Dark'",
-        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T1.title = 'Dancer in the Dark'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Tally the movie ID and character name in the movie starring Jim Carrey.",
-        "evidence": "",
-        "SQL": "SELECT T2.movie_id, T2.character_name FROM person AS T1 INNER JOIN movie_cast AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Jim Carrey'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "How many movies did Harrison Ford appear in total?",
-        "evidence": "",
-        "SQL": "SELECT COUNT(T2.movie_id) FROM person AS T1 INNER JOIN movie_cast AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Harrison Ford'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Calculate the average budget of the movies directed by Jaume Collet-Serra.",
-        "evidence": "directed by refers to job = 'Director'; average budget = AVG(budget)",
-        "SQL": "SELECT CAST(SUM(T1.budget) AS REAL) / COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Jaume Collet-Serra' AND T2.job = 'Director'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List down the IDs of the production companies that released the movies in 1916.",
-        "evidence": "IDs of the production companies refers to company_id; movies in 1916 refers to release_date LIKE '1916%'",
-        "SQL": "SELECT T2.company_id FROM movie AS T1 INNER JOIN movie_company AS T2 ON T1.movie_id = T2.movie_id WHERE CAST(STRFTIME('%Y', T1.release_date) AS INT) = 1916"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Who is the director for the movie 'Transformers?'",
-        "evidence": "the director refers to person_name where job = 'Director'; movie 'Transformers' refers to title = 'Transformers'",
-        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title = 'Transformers' AND T2.job = 'Director'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the percentage of romance films among films produced in India in 2015?",
-        "evidence": "romance films refers to genre_name = 'Romance'; in India refers to country_name = 'India'; 2015 refers to release_date BETWEEN '2015-01-01' AND '2015-01-31'; percentage = divide(sum(movie_id) when genre_name = 'Romance', count(movie_id)) as percentage",
-        "SQL": "SELECT CAST(COUNT(CASE WHEN T4.genre_name = 'Romance' THEN T1.movie_id ELSE NULL END) AS REAL) * 100 / COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN production_COUNTry AS T3 ON T1.movie_id = T3.movie_id INNER JOIN genre AS T4 ON T2.genre_id = T4.genre_id INNER JOIN COUNTry AS T5 ON T3.COUNTry_id = T5.COUNTry_id WHERE T5.COUNTry_name = 'India' AND T1.release_date BETWEEN '2015-01-01' AND '2015-12-31'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Accumulate the budget of the movie titles with the keyword of \"video game\".",
-        "evidence": "keyword of \"video game\" refers to keyword_name = 'video game'",
-        "SQL": "SELECT SUM(T1.budget) FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T3.keyword_name = 'video game'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the longest runtime of all movies?",
-        "evidence": "longest runtime refers to max(runtime)",
-        "SQL": "SELECT MAX(runtime) FROM movie"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Calculate the 2016 gap between the average revenue for Indian and American films.",
-        "evidence": "2016 refers to release_date LIKE '2016%'; Indian and American films refers to country_name = 'India' and country_name = 'United States of America'; gap between the average revenue refers to subtract(divide(sum(revenue), count(movie_id)) when country_name = 'United States of America', divide(sum(revenue), count(movie_id)) when country_name = 'India')",
-        "SQL": "SELECT AVG(CASE WHEN T3.COUNTry_name = 'United States of America' THEN T1.revenue END) - AVG(CASE WHEN T3.COUNTry_name = 'India' THEN T1.revenue END) AS CALCULATE FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE CAST(STRFTIME('%Y', T1.release_date) AS INT) = 2016"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "How many movies were directed by Michael Bay?",
-        "evidence": "directed by refers to job = 'Director'",
-        "SQL": "SELECT COUNT(T2.movie_id) FROM person AS T1 INNER JOIN movie_crew AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Michael Bay' AND T2.job = 'Director'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the country ID of the movie with the title of \"Pirates of the Caribbean: Dead Man's Chest\"?",
-        "evidence": "title of \"Pirates of the Caribbean: Dead Man's Chest\" refers to title = 'Pirates of the Caribbean: Dead Man''s Chest'",
-        "SQL": "SELECT T2.COUNTry_id FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title LIKE 'Pirates of the Caribbean: Dead Man%s Chest'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List down five movie titles that were released before 2000.",
-        "evidence": "released before 2000 refers to release_date < '2000-01-01'",
-        "SQL": "SELECT title FROM movie WHERE CAST(STRFTIME('%Y', release_date) AS INT) < 2000 LIMIT 5"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Write me the titles of the movies starring Jim Carrey.",
-        "evidence": "Jim Carrey is the person_name;",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Jim Carrey'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "For all the movies which were produced by Cruel and Unusual Films, which one has the most popularity?",
-        "evidence": "produced by Cruel and Unusual Films refers to company_name = 'Cruel and Unusual Films'; most popularity refers to max(popularity)",
-        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Cruel and Unusual Films' ORDER BY T3.popularity DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List the job titles of Sally Menke in the crew.",
-        "evidence": "job titles refers to job",
-        "SQL": "SELECT DISTINCT T2.job FROM person AS T1 INNER JOIN movie_crew AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Sally Menke'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the most common first name?",
-        "evidence": "most common first name refers to max(count(person_name))",
-        "SQL": "SELECT person_name FROM person GROUP BY person_name ORDER BY COUNT(person_name) DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Which character did Orlando Bloom play in the movie Pirates of the Caribbean: The Curse of the Black Pearl?",
-        "evidence": "Which character refers to character_name; movie Pirates of the Caribbean: The Curse of the Black Pearl refers to title = 'Pirates of the Caribbean: The Curse of the Black Pearl'",
-        "SQL": "SELECT T2.character_name FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title = 'Pirates of the Caribbean: The Curse of the Black Pearl' AND T3.person_name = 'Orlando Bloom'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What percentage of movies that came from Japan belong in the 'animation' genre?",
-        "evidence": "from Japan refers to country_name = 'Japan'; in the 'animation' genre refers to genre_name = 'animation'; percentage = divide(sum(movie_id) when genre_name = 'animation', count(movie_id)) as percentage",
-        "SQL": "SELECT CAST(COUNT(CASE WHEN T4.genre_name = 'Animation' THEN T1.movie_id ELSE NULL END) AS REAL) * 100 / COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN production_COUNTry AS T3 ON T1.movie_id = T3.movie_id INNER JOIN genre AS T4 ON T2.genre_id = T4.genre_id INNER JOIN COUNTry AS T5 ON T3.COUNTry_id = T5.COUNTry_id WHERE T5.COUNTry_name = 'Japan'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the genre of the movie title with the lowest revenue generated?",
-        "evidence": "genre refers to genre_name; lowest revenue refers to min(revenue)",
-        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id ORDER BY T1.revenue LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List the names of camera supervisors in the crew.",
-        "evidence": "names refers to person_name; camera supervisors refers to job = 'Camera Supervisor';",
-        "SQL": "SELECT T1.person_name FROM person AS T1 INNER JOIN movie_crew AS T2 ON T1.person_id = T2.person_id WHERE T2.job = 'Camera Supervisor'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Who played Captain Jack Sparrow in all of the Pirates of the Caribbean movies?",
-        "evidence": "Captain Jack Sparrow refers to character_name = 'Captain Jack Sparrow'; Pirates of the Caribbean movies refers to title LIKE 'Pirates of the Carribbean%'",
-        "SQL": "SELECT DISTINCT T3.person_name FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T2.character_name = 'Captain Jack Sparrow' AND T1.title LIKE 'Pirates of the Caribbean%'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the title of the highest-budget film to date? Please include the revenue and name the country.",
-        "evidence": "highest-budget film refers to max(budget); name the country refers to country_name",
-        "SQL": "SELECT T1.title, T1.revenue, T3.COUNTry_name FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id ORDER BY T1.budget DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Find out the language ID of the movie with the highest popularity.",
-        "evidence": "highest popularity refers to max(popularity)",
-        "SQL": "SELECT T2.language_id FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id ORDER BY T1.popularity DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Which department has the most people?",
-        "evidence": "department refers to department_name; most people refers to max(count(department_id))",
-        "SQL": "SELECT T1.department_name FROM department AS T1 INNER JOIN movie_crew AS T2 ON T1.department_id = T2.department_id GROUP BY T1.department_id ORDER BY COUNT(T2.department_id) DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the language ID of the movie \"Walk the Line\"?",
-        "evidence": "movie \"Walk the Line\" refers to title = 'Walk the Line'",
-        "SQL": "SELECT T2.language_id FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'Walk the Line'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the most common keyword among all the movies released in 2006?",
-        "evidence": "most common keyword refers to max(count(keyword_name)); movies released in 2006 refers to release_date LIKE '%2006%'",
-        "SQL": "SELECT T3.keyword_name FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T1.release_date LIKE '2006%' GROUP BY T3.keyword_name ORDER BY COUNT(T3.keyword_name) DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "How many times did Bob Peterson appear in the movie credits?",
-        "evidence": "",
-        "SQL": "SELECT COUNT(T2.movie_id) FROM person AS T1 INNER JOIN movie_cast AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Bob Peterson'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Provide the release date and language of the most popular movie.",
-        "evidence": "language refers to langauge_name; most popular movie refers to max(popularity)",
-        "SQL": "SELECT T1.release_date, T3.language_name FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id ORDER BY T1.popularity DESC LIMIT 1"
+        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Universal Pictures' ORDER BY T3.release_date DESC LIMIT 1",
+        "Answer": "Warcraft"
     },
     {
         "db_id": "movies_4",
         "question": "What is the name of the director of photography of the movie \"Pirates of the Caribbean: At World's End\"?",
         "evidence": "name of the director of photography refers to person_name where job = 'Director of Photography'; \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
-        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End' AND T2.job = 'Director of Photography'"
+        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End' AND T2.job = 'Director of Photography'",
+        "Answer": "Dariusz Wolski"
     },
     {
         "db_id": "movies_4",
-        "question": "Among the zero-budget movie titles, which one has made the highest revenue?",
-        "evidence": "zero-budget refers to budget = 0; highest revenue refers to max(revenue)",
-        "SQL": "SELECT title FROM movie WHERE budget = 0 ORDER BY revenue DESC LIMIT 1"
+        "question": "What was the job of Dariusz Wolski in the movie \"Pirates of the Caribbean: At World's End\"?",
+        "evidence": "movie \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
+        "SQL": "SELECT T2.job FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End' AND T3.person_name = 'Dariusz Wolski'",
+        "Answer": "Director of Photography"
     },
     {
         "db_id": "movies_4",
-        "question": "How many adventure movies are there that were released in 2000?",
-        "evidence": "adventure movies refers to genre_name = 'Adventure'; released in 2000 refers to release_date LIKE '2000%'",
-        "SQL": "SELECT COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T3.genre_name = 'Adventure' AND CAST(STRFTIME('%Y', T1.release_date) AS INT) = 2000"
+        "question": "Please list the names of all the crew members of the movie \"Pirates of the Caribbean: At World's End\".",
+        "evidence": "names refers to person_name; \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
+        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End'",
+        "Answer": "Dariusz Wolski,Gore Verbinski,Jerry Bruckheimer,Ted Elliott,Terry Rossio,Stephen E. Rivkin,Craig Wood,Hans Zimmer,Mike Stenson,Eric McLeod,Chad Oman,Peter Kohn,Pat Sandston,Denise Chamian,Rick Heinrichs,John Dexter,Priscilla John,Cheryl Carasik,Liz Dann,Penny Rose,Bob Badami,James Ward Byrkit,Ve Neill,John Dixon,Dottie Starling,Pamela Alch,Allen Hall,Melissa Muik,Sharron Reynolds,Barbara McDermott,Karen Golden,Katie Greathouse"
     },
     {
         "db_id": "movies_4",
-        "question": "List the names of the production companies that made at least 200 movies.",
-        "evidence": "names of the production companies refers to company_name; at least 200 movies refers to COUNT(company_name) > = 200",
-        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id GROUP BY T1.company_id HAVING COUNT(T2.movie_id) > 200"
+        "question": "How many crew members worked as producer in the movie \"Pirates of the Caribbean: At World's End\"?",
+        "evidence": "worked as producer refers to job = 'Producer'; \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
+        "SQL": "SELECT COUNT(T3.person_id) FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End' AND T2.job = 'Producer'",
+        "Answer": "5"
     },
     {
         "db_id": "movies_4",
-        "question": "Calculate the average income made by movies using the keyword \"paris\". List the title of the movies.",
-        "evidence": "income refers to revenue; keyword \"paris\" refers to keyword_name = 'paris'; average income = AVG(revenue)",
-        "SQL": "SELECT AVG(T1.revenue), T1.title FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T3.keyword_name = 'paris'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Provide the ID and ISO code of Belgium.",
-        "evidence": "ID refers to country_id; ISO code refers to country_iso_code; Belgium refers to country_name = 'Belgium'",
-        "SQL": "SELECT COUNTry_id, COUNTry_iso_code FROM COUNTry WHERE COUNTry_name = 'Belgium'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List down the movie titles within the genre of thriller.",
-        "evidence": "genre of thriller refers to genre_name = 'Thriller'",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T3.genre_name = 'Thriller'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "For movies with the keyword of \"civil war\", calculate the average revenue generated by these movies.",
-        "evidence": "keyword of \"civil war\" refers to keyword_name = 'civil war'; average revenue = AVG(revenue)",
-        "SQL": "SELECT AVG(T1.revenue) FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T3.keyword_name = 'civil war'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Provide the production companies of the movie that has over 35% average running time per movie in 2016.",
-        "evidence": "production companies refers to company_name; in 2016 refers to release_date LIKE '2016%'; over 35% average running time per movie refers to divide(subtract(runtime, AVG(runtime)), AVG(runtime)) * 100 as percentage > 35",
-        "SQL": "SELECT T.company_name FROM ( SELECT DISTINCT T3.company_name, T1.runtime FROM movie AS T1 INNER JOIN movie_company AS T2 ON T1.movie_id = T2.movie_id INNER JOIN production_company AS T3 ON T3.company_id = T2.company_id WHERE T1.release_date LIKE '2016%' ) T WHERE T.runtime * 100 > (0.35 * ( SELECT AVG(T1.runtime) FROM movie AS T1 INNER JOIN movie_company AS T2 ON T1.movie_id = T2.movie_id INNER JOIN production_company AS T3 ON T3.company_id = T2.company_id WHERE T1.release_date LIKE '2016%' ) + ( SELECT AVG(T1.runtime) FROM movie AS T1 INNER JOIN movie_company AS T2 ON T1.movie_id = T2.movie_id INNER JOIN production_company AS T3 ON T3.company_id = T2.company_id WHERE T1.release_date LIKE '2016%' )) * 100"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List the character names played by Catherine Deneuve.",
-        "evidence": "",
-        "SQL": "SELECT T2.character_name FROM person AS T1 INNER JOIN movie_cast AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Catherine Deneuve'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "When was the first movie released?",
-        "evidence": "when the first movie refers to release_date where min(release_date)",
-        "SQL": "SELECT MIN(release_date) FROM movie WHERE movie_status = 'Released'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the iso code of \"Kyrgyz Republic\"?",
-        "evidence": "iso code refers to country_iso_code; \"Kyrgyz Republic\" refers to country_name = 'Kyrgyz Republic'",
-        "SQL": "SELECT COUNTry_iso_code FROM COUNTry WHERE COUNTry_name = 'Kyrgyz Republic'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Provide the most used keyword in the movies.",
-        "evidence": "most used keyword refers to keyword_name where max(count(keyword_name))",
-        "SQL": "SELECT T1.keyword_name FROM keyword AS T1 INNER JOIN movie_keywords AS T2 ON T1.keyword_id = T2.keyword_id GROUP BY T1.keyword_name ORDER BY COUNT(T1.keyword_name) DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the third least common genre?",
-        "evidence": "least common genre refers to min(count(genre_name))",
-        "SQL": "SELECT T2.genre_name FROM movie_genres AS T1 INNER JOIN genre AS T2 ON T1.genre_id = T2.genre_id GROUP BY T2.genre_id ORDER BY COUNT(T1.movie_id) LIMIT 2, 1"
+        "question": "Please list the names of all the producers in the movie \"Pirates of the Caribbean: At World's End\".",
+        "evidence": "names refers to person_name; producers refers to job = 'Producer'; \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
+        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End' AND T2.job = 'Producer'",
+        "Answer": "Jerry Bruckheimer,Eric McLeod,Chad Oman,Peter Kohn,Pat Sandston"
     },
     {
         "db_id": "movies_4",
         "question": "In how many movie does Dariusz Wolski work as the director of photography?",
         "evidence": "director of photography refers to job = 'Director of Photography'",
-        "SQL": "SELECT COUNT(T2.movie_id) FROM person AS T1 INNER JOIN movie_crew AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Dariusz Wolski' AND T2.job = 'Director of Photography'"
+        "SQL": "SELECT COUNT(T2.movie_id) FROM person AS T1 INNER JOIN movie_crew AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Dariusz Wolski' AND T2.job = 'Director of Photography'",
+        "Answer": "19"
     },
     {
         "db_id": "movies_4",
-        "question": "Provide the genre ID of the movie with the title of \"The Dark Knight\".",
-        "evidence": "movie with the title of \"The Dark Knight\" refers to title = 'The Dark Knight'",
-        "SQL": "SELECT T2.genre_id FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'The Dark Knight'"
+        "question": "Among the movie in which Dariusz Wolski works as the director of photography, what is the title of the one with the highest average vote?",
+        "evidence": "director of photography refers to job = 'Director of Photography'; highest average vote refers to max(vote_average)",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Dariusz Wolski' AND T2.job = 'Director of Photography' ORDER BY T1.vote_average DESC LIMIT 1",
+        "Answer": "The Martian"
     },
     {
         "db_id": "movies_4",
-        "question": "Who is the person associated with the crew id 1325273?",
-        "evidence": "Who is the person refers to person_name; crew id 1325273 refers to person_id = 1325273",
-        "SQL": "SELECT person_name FROM person WHERE person_id = 1325273"
+        "question": "When was the release date of the latest movie in which Dariusz Wolski worked as a crew member?",
+        "evidence": "release date of the latest movie refers to max(release_date)",
+        "SQL": "SELECT T1.release_date FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Dariusz Wolski' ORDER BY T1.release_date DESC LIMIT 1",
+        "Answer": "2015-09-30"
     },
     {
         "db_id": "movies_4",
-        "question": "What is the role of Mark Hammel?",
-        "evidence": "role refers to job",
-        "SQL": "SELECT T2.job FROM person AS T1 INNER JOIN movie_crew AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Mark Hammel'"
+        "question": "Among the movie in which Dariusz Wolski works as the director of photography, what is the percentage of those movie whose vote average is over 5.0?",
+        "evidence": "director of photography refers to job = 'Director of Photography'; vote average is over 8.0 refers to vote_average > 5; percentage = divide(sum(movie_id) when vote_average > 5, count(movie_id)) as percentage",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T1.vote_average > 5 THEN 1 ELSE NULL END) AS REAL) * 100 / COUNT(T1.vote_average) FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Dariusz Wolski' AND T2.job = 'Director of Photography'",
+        "Answer": "94.73684210526316"
     },
     {
         "db_id": "movies_4",
-        "question": "List all the unspecified gender characters.",
-        "evidence": "characters refers to character_name; gender = 'Unspecified'",
-        "SQL": "SELECT T1.character_name FROM movie_cast AS T1 INNER JOIN gender AS T2 ON T1.gender_id = T2.gender_id WHERE T2.gender = 'Unspecified'"
+        "question": "What is the average revenue of the movie in which Dariusz Wolski works as the director of photography?",
+        "evidence": "director of photography refers to job = 'Director of Photography'; average revenue = divide(sum(revenue), count(movie_id))",
+        "SQL": "SELECT CAST(SUM(T1.revenue) AS REAL) / COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Dariusz Wolski' AND T2.job = 'Director of Photography'",
+        "Answer": "368497595.57894737"
     },
     {
         "db_id": "movies_4",
-        "question": "List the person IDs of the second film editors in Movie No. 12.",
-        "evidence": "second film editors refers to job = 'Second Film Editor'; Movie No. 12 refers to movie_id = 12",
-        "SQL": "SELECT person_id FROM movie_crew WHERE movie_id = 12 AND job = 'Second Film Editor'"
+        "question": "Give the name of the movie with a revenue of 559852396.",
+        "evidence": "name of the movie refers to title; revenue of 559852396 refers to revenue = '559852396'",
+        "SQL": "SELECT title FROM movie WHERE revenue = 559852396",
+        "Answer": "Cars 2"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What was David Rubin's job in the movie \"Days of Thunder\"?",
+        "evidence": "\"Days of Thunder\" refers to title = 'Days of Thunder'",
+        "SQL": "SELECT T2.job FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'David Rubin' AND T1.title = 'Days of Thunder'",
+        "Answer": "Casting"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many movies were directed by Michael Bay?",
+        "evidence": "directed by refers to job = 'Director'",
+        "SQL": "SELECT COUNT(T2.movie_id) FROM person AS T1 INNER JOIN movie_crew AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Michael Bay' AND T2.job = 'Director'",
+        "Answer": "12"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Show the total number of keywords of the movie \"I Hope They Serve Beer in Hell\".",
+        "evidence": "\"I Hope They Serve Beer in Hell\" refers to title = 'I Hope They Serve Beer in Hell';",
+        "SQL": "SELECT COUNT(T2.keyword_id) FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'I Hope They Serve Beer in Hell'",
+        "Answer": "6"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "For the movie \"Land of the Dead\", who is its director?",
+        "evidence": "\"Land of the Dead\" refers to title = 'Land of the Dead'; director refers to person_name where job = 'Director'",
+        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title = 'Land of the Dead' AND T2.job = 'Director'",
+        "Answer": "George A. Romero"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Tell the number of movies made by Paramount Animation.",
+        "evidence": "Paramount Animation refers to company_name = 'Paramount Animation'",
+        "SQL": "SELECT COUNT(T2.movie_id) FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id WHERE T1.company_name = 'Paramount Animation'",
+        "Answer": "11"
     },
     {
         "db_id": "movies_4",
         "question": "How many female characters are there in the movie \"Spider-Man 3\"?",
         "evidence": "female characters refer to gender = 'Female'; \"Spider-Man 3\" refers to title = 'Spider-Man 3'",
-        "SQL": "SELECT COUNT(*) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN gender AS T3 ON T2.gender_id = T3.gender_id WHERE T1.title = 'Spider-Man 3' AND T3.gender = 'Female'"
+        "SQL": "SELECT COUNT(*) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN gender AS T3 ON T2.gender_id = T3.gender_id WHERE T1.title = 'Spider-Man 3' AND T3.gender = 'Female'",
+        "Answer": "56"
     },
     {
         "db_id": "movies_4",
-        "question": "List down the tagline of the Polski movies.",
-        "evidence": "Polski movies refers to language_name = 'Polski'",
-        "SQL": "SELECT DISTINCT T1.tagline FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Polski'"
+        "question": "Provide the most used keyword in the movies.",
+        "evidence": "most used keyword refers to keyword_name where max(count(keyword_name))",
+        "SQL": "SELECT T1.keyword_name FROM keyword AS T1 INNER JOIN movie_keywords AS T2 ON T1.keyword_id = T2.keyword_id GROUP BY T1.keyword_name ORDER BY COUNT(T1.keyword_name) DESC LIMIT 1",
+        "Answer": "woman director"
     },
     {
         "db_id": "movies_4",
-        "question": "Which keywords belong to the movie titles with the highest popularity?",
-        "evidence": "Which keywords refers to keyword_name; highest popularity refers to max(popularity)",
-        "SQL": "SELECT T3.keyword_name FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id ORDER BY T1.popularity DESC LIMIT 1"
+        "question": "How many producers does the movie \"The Amityville Horror\" have?",
+        "evidence": "producers refers to job = 'Producer'; \"The Amityville Horror\" refers to title = 'The Amityville Horror'",
+        "SQL": "SELECT COUNT(T2.person_id) FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'The Amityville Horror' AND T2.job = 'Producer'",
+        "Answer": "9"
     },
     {
         "db_id": "movies_4",
-        "question": "Who is the main actor in the \"Pirates of the Caribbean: At World's End\" movie?",
-        "evidence": "main actor refers to person_name where Min(cast_order); \"Pirates of the Caribbean: At World's End\" refers to title = 'Pirates of the Caribbean: At World''s End'",
-        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title LIKE 'Pirates of the Caribbean: At World%s End' ORDER BY T2.cast_order LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "How many main actors are there in the movie Pirates of the Caribbean: At World's End?",
-        "evidence": "main actors refers to gender = 'male' and min(cast_order); Pirates of the Caribbean: At World's End refers to title = 'Pirates of the Caribbean: At World''s End'",
-        "SQL": "SELECT COUNT(T2.cast_order) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN gender AS T3 ON T3.gender_id = T2.gender_id WHERE T3.gender = 'Male' OR T3.gender = 'Female' AND T1.title = 'Pirates of the Caribbean: At World''s End' AND T2.cast_order = ( SELECT MIN(T2.cast_order) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN gender AS T3 ON T3.gender_id = T2.gender_id WHERE T3.gender = 'Male' OR T3.gender = 'Female' AND T1.title = 'Pirates of the Caribbean: At World''s End' )"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List all the keywords with \"christmas\" in them.",
-        "evidence": "keywords with \"christmas\" in them refers to keyword_name LIKE '%christmas%'",
-        "SQL": "SELECT keyword_name FROM keyword WHERE keyword_name LIKE '%christmas%'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What are the top 5 most popular movie directors?",
-        "evidence": "directors refers to job = 'Director'; most popular refers to max(popularity)",
-        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T2.job = 'Director' ORDER BY T1.popularity DESC LIMIT 5"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List down the movies produced by Lucasfilm.",
-        "evidence": "movies refers to title; produced by Lucasfil refers to company_name = 'Lucasfilm'",
-        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Lucasfilm'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the average number of crews for a movie?",
-        "evidence": "average number of crews = divide(count(person_id), COUNT(movie_id))",
-        "SQL": "SELECT CAST(SUM(CD) AS REAL) / COUNT(movie_id) FROM ( SELECT movie_id, COUNT(person_id) AS CD FROM movie_crew GROUP BY movie_id )"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Provide the average revenue of all the French movies.",
-        "evidence": "French movies refers to country_name = 'France'; average revenue = AVG(revenue)",
-        "SQL": "SELECT AVG(T1.revenue) FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE T3.COUNTry_name = 'France'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "What is the title of the movie that was made with the most money and resources?",
-        "evidence": "made with the most money and resources refers to max(budget)",
-        "SQL": "SELECT title FROM movie ORDER BY budget DESC LIMIT 1"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Write down five rumoured movie titles within the genre of Drama.",
-        "evidence": "rumoured movie refers to movie_status = 'rumoured'; genre of Drama refers to genre_name = 'Drama'",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T1.movie_status = 'Rumored' AND T3.genre_name = 'Drama' LIMIT 5"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List all the actors who have played characters with \"captain\" in their names.",
-        "evidence": "List all the actors refers to person_name; characters with \"captain\" in their names refers to character_name LIKE '%captain%';",
-        "SQL": "SELECT DISTINCT T1.person_name FROM person AS T1 INNER JOIN movie_cast AS T2 ON T1.person_id = T2.person_id WHERE T2.character_name LIKE '%captain%'"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "Which movies did the company Paramount Pictures produce in 2000?",
-        "evidence": "Which movies refers to title; company Paramount Pictures refers to company_name = 'Paramount Pictures'; in 2000 refers to release_date LIKE '2000%'",
-        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Paramount Pictures' AND CAST(STRFTIME('%Y', T3.release_date) AS INT) = 2000"
-    },
-    {
-        "db_id": "movies_4",
-        "question": "List down the movie titles that were produced in Canada.",
-        "evidence": "produced in Canada refers to country_name = 'Canada'",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE T3.COUNTry_name = 'Canada'"
+        "question": "What is the production company of the movie \"Crazy Heart\"?",
+        "evidence": "movie \"Crazy Heart\" refers to title = 'Crazy Heart'; production company refers to company_name",
+        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T3.title = 'Crazy Heart'",
+        "Answer": "Butcher's Run Films,Fox Searchlight Pictures,Informant Media"
     },
     {
         "db_id": "movies_4",
         "question": "Give the number of movies with \"saving the world\" as the keyword.",
         "evidence": "\"saving the world\" as the keyword refers to keyword_name = 'saving the world'",
-        "SQL": "SELECT COUNT(T2.movie_id) FROM keyword AS T1 INNER JOIN movie_keywords AS T2 ON T1.keyword_id = T2.keyword_id WHERE keyword_name = 'saving the world'"
+        "SQL": "SELECT COUNT(T2.movie_id) FROM keyword AS T1 INNER JOIN movie_keywords AS T2 ON T1.keyword_id = T2.keyword_id WHERE keyword_name = 'saving the world'",
+        "Answer": "34"
     },
     {
         "db_id": "movies_4",
-        "question": "List 10 movie titles that were produced in France.",
-        "evidence": "France refers to country_name = 'France'",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE T3.COUNTry_name = 'France' LIMIT 10"
+        "question": "For all the movies which were produced by Cruel and Unusual Films, which one has the most popularity?",
+        "evidence": "produced by Cruel and Unusual Films refers to company_name = 'Cruel and Unusual Films'; most popularity refers to max(popularity)",
+        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Cruel and Unusual Films' ORDER BY T3.popularity DESC LIMIT 1",
+        "Answer": "Man of Steel"
     },
     {
         "db_id": "movies_4",
-        "question": "How many horror movies are there?",
-        "evidence": "horror movies refers to genre_name = 'Horror'",
-        "SQL": "SELECT COUNT(T1.movie_id) FROM movie_genres AS T1 INNER JOIN genre AS T2 ON T1.genre_id = T2.genre_id WHERE T2.genre_name = 'Horror'"
+        "question": "For the movie \"Reign of Fire\", which department was Marcia Ross in?",
+        "evidence": "movie \"Reign of Fire\" refers to title = 'Reign of Fire'; which department refers to department_name",
+        "SQL": "SELECT T4.department_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id INNER JOIN department AS T4 ON T2.department_id = T4.department_id WHERE T3.person_name = 'Marcia Ross' AND T1.title = 'Reign of Fire'",
+        "Answer": "Production"
     },
     {
         "db_id": "movies_4",
-        "question": "What is the keyword ID of the movie with the title of \"Sin City\"?",
-        "evidence": "title of \"Sin City\" refers to title = 'Sin City'",
-        "SQL": "SELECT T2.keyword_id FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'Sin City'"
+        "question": "Calculate the average budget of the movies directed by Jaume Collet-Serra.",
+        "evidence": "directed by refers to job = 'Director'; average budget = AVG(budget)",
+        "SQL": "SELECT CAST(SUM(T1.budget) AS REAL) / COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Jaume Collet-Serra' AND T2.job = 'Director'",
+        "Answer": "38000000.0"
     },
     {
         "db_id": "movies_4",
-        "question": "Look for the movie title with the keyword of \"angel\".",
-        "evidence": "keyword of \"angel\" refers to keyword_name = 'angel'",
-        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T3.keyword_name = 'angel'"
+        "question": "What is the percentage of male characters in the movie \"Bride Wars\"?",
+        "evidence": "male refers to gender = 'Male'; \"Bride Wars\" refers to title = 'Bride Wars'; percentage = divide(sum(gender = 'Male'), count(gender)) * 100 as percentage",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T3.gender = 'Male' THEN 1 ELSE NULL END) AS REAL) * 100 / COUNT(T3.gender) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN gender AS T3 ON T2.gender_id = T3.gender_id WHERE T1.title = 'Bride Wars'",
+        "Answer": "32.142857142857146"
     },
     {
         "db_id": "movies_4",
-        "question": "Work out the difference in revenues made between the English and Latin movies.",
-        "evidence": "English refers to language_name = 'English'; Latin refers to language_name = 'Latin'; difference in revenues = subtract(sum(movie_id) when language_name = 'English', sum(movie_id) when language_name = 'Latin')",
-        "SQL": "SELECT SUM(CASE WHEN T3.language_name = 'English' THEN T1.revenue ELSE 0 END) - SUM(CASE WHEN T3.language_name = 'Latin' THEN T1.revenue ELSE 0 END) AS DIFFERENCE FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id"
+        "question": "What is the title of the movie that was made with the most money and resources?",
+        "evidence": "made with the most money and resources refers to max(budget)",
+        "SQL": "SELECT title FROM movie ORDER BY budget DESC LIMIT 1",
+        "Answer": "Pirates of the Caribbean: On Stranger Tides"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many movies have made at least 1 Billion at the box office?",
+        "evidence": "have made at least 1 Billion at the box office refers to revenue > 1000000000",
+        "SQL": "SELECT COUNT(movie_id) FROM movie WHERE revenue > 1000000000",
+        "Answer": "21"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "When was the first movie released?",
+        "evidence": "when the first movie refers to release_date where min(release_date)",
+        "SQL": "SELECT MIN(release_date) FROM movie WHERE movie_status = 'Released'",
+        "Answer": "1916-09-04"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many crew are named John Young?",
+        "evidence": "",
+        "SQL": "SELECT COUNT(person_id) FROM person WHERE person_name = 'John Young'",
+        "Answer": "2"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Provide the title of the movie that is most-liked by a large number of people.",
+        "evidence": "most-liked by a large number of people refers to max(popularity)",
+        "SQL": "SELECT title FROM movie ORDER BY popularity DESC LIMIT 1",
+        "Answer": "Minions"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Who is the person associated with the crew id 1325273?",
+        "evidence": "Who is the person refers to person_name; crew id 1325273 refers to person_id = 1325273",
+        "SQL": "SELECT person_name FROM person WHERE person_id = 1325273",
+        "Answer": "A. Menyalshchikov"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the name of the production company that made the most movies?",
+        "evidence": "name of the production company refers to company_name; most movies refers to max(count(company_name))",
+        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id GROUP BY T1.company_id ORDER BY COUNT(T2.movie_id) DESC LIMIT 1",
+        "Answer": "Warner Bros."
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Who played Captain Jack Sparrow in all of the Pirates of the Caribbean movies?",
+        "evidence": "Captain Jack Sparrow refers to character_name = 'Captain Jack Sparrow'; Pirates of the Caribbean movies refers to title LIKE 'Pirates of the Carribbean%'",
+        "SQL": "SELECT DISTINCT T3.person_name FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T2.character_name = 'Captain Jack Sparrow' AND T1.title LIKE 'Pirates of the Caribbean%'",
+        "Answer": "Johnny Depp"
     },
     {
         "db_id": "movies_4",
         "question": "What is Walt Disney Pictures' most popular movie?",
         "evidence": "Walt Disney Pictures refers to company_name = 'Walt Disney Pictures'; most popular movie refers to max(popularity)",
-        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Walt Disney Pictures' ORDER BY T3.popularity DESC LIMIT 1"
+        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Walt Disney Pictures' ORDER BY T3.popularity DESC LIMIT 1",
+        "Answer": "Pirates of the Caribbean: The Curse of the Black Pearl"
     },
     {
         "db_id": "movies_4",
-        "question": "What is the average number of horror movies among all movies genre?",
-        "evidence": "horror movies refers to genre_name = 'horror'; average number = divide(sum(movie_id) when genre_name = 'horror', count(movie_id))",
-        "SQL": "SELECT CAST(COUNT(CASE WHEN T3.genre_name = 'Horror' THEN T1.movie_id ELSE NULL END) AS REAL) / COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id"
+        "question": "How many movies did Universal Studios release?",
+        "evidence": "Universal Studios refers to company_name = 'Universal Studios'",
+        "SQL": "SELECT COUNT(T2.movie_id) FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id WHERE T1.company_name = 'Universal Studios'",
+        "Answer": "7"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Which production company produced the movie that made the most money at the box office?",
+        "evidence": "Which production company refers to company_name; most money at the box office refers to max(revenue)",
+        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id GROUP BY T1.company_id ORDER BY SUM(T3.revenue) DESC LIMIT 1",
+        "Answer": "Warner Bros."
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many female crews are in the movie \"Mr. Smith Goes to Washington\"?",
+        "evidence": "female crews refers to gender = 'Female'; \"Mr. Smith Goes to Washington\" refers to title = 'Mr. Smith Goes to Washington'",
+        "SQL": "SELECT COUNT(T3.gender) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN gender AS T3 ON T2.gender_id = T3.gender_id WHERE T1.title = 'Mr. Smith Goes to Washington' AND T3.gender = 'Female'",
+        "Answer": "14"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List the names of the production companies that made at least 200 movies.",
+        "evidence": "names of the production companies refers to company_name; at least 200 movies refers to COUNT(company_name) > = 200",
+        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id GROUP BY T1.company_id HAVING COUNT(T2.movie_id) > 200",
+        "Answer": "Paramount Pictures,Columbia Pictures,Universal Pictures,Twentieth Century Fox Film Corporation,Warner Bros."
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many movies did Harrison Ford appear in total?",
+        "evidence": "",
+        "SQL": "SELECT COUNT(T2.movie_id) FROM person AS T1 INNER JOIN movie_cast AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Harrison Ford'",
+        "Answer": "25"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the title of Jamie Foxx's most recent movie?",
+        "evidence": "most recent movie refers to max(release_date)",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Jamie Foxx' ORDER BY T1.release_date DESC LIMIT 1",
+        "Answer": "Valentine's Day"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many movies released in 1995 did Quentin Tarantino appear in?",
+        "evidence": "released in 1995 refers to release_date LIKE '1995%'",
+        "SQL": "SELECT COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Quentin Tarantino' AND CAST(STRFTIME('%Y', T1.release_date) AS INT) = 1995",
+        "Answer": "2"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the title of the first crime movie ever released?",
+        "evidence": "first crime movie ever released refers to min(release_date) and genre_name = 'Crime'",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T3.genre_name = 'Crime' ORDER BY T1.release_date LIMIT 1",
+        "Answer": "The Lady from Shanghai"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many horror movies are there?",
+        "evidence": "horror movies refers to genre_name = 'Horror'",
+        "SQL": "SELECT COUNT(T1.movie_id) FROM movie_genres AS T1 INNER JOIN genre AS T2 ON T1.genre_id = T2.genre_id WHERE T2.genre_name = 'Horror'",
+        "Answer": "519"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List the person IDs of the second film editors in Movie No. 12.",
+        "evidence": "second film editors refers to job = 'Second Film Editor'; Movie No. 12 refers to movie_id = 12",
+        "SQL": "SELECT person_id FROM movie_crew WHERE movie_id = 12 AND job = 'Second Film Editor'",
+        "Answer": "8066,56270,1516156"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many animators does Movie No. 129 have?",
+        "evidence": "animators refers to job = 'Animation'; Movie No. 129 refers to movie_id = 129",
+        "SQL": "SELECT COUNT(movie_id) FROM movie_crew WHERE movie_id = 129 AND job = 'Animation'",
+        "Answer": "13"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "In Movie No. 19, how many people are there in Department No. 7? Please give me their job.",
+        "evidence": "Movie No. 19 refers to movie_id = 19; Department No. 7 refers to department_id = 7",
+        "SQL": "SELECT COUNT(DISTINCT job) FROM movie_crew WHERE movie_id = 19 AND department_id = 7",
+        "Answer": "3"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Write the person ID and character name of casts between order numbers 1 and 10 in Movie No. 285.",
+        "evidence": "casts between order numbers 1 and 10 refers to cast_order BETWEEN 2 AND 9; Movie No. 285 refers to movie_id = 285",
+        "SQL": "SELECT person_id, character_name FROM movie_cast WHERE movie_id = 285 AND cast_order BETWEEN 1 AND 10",
+        "Answer": "114,116,1640,1619,2440,118,1709,2449,2441,2038"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many times did Bob Peterson appear in the movie credits?",
+        "evidence": "",
+        "SQL": "SELECT COUNT(T2.movie_id) FROM person AS T1 INNER JOIN movie_cast AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Bob Peterson'",
+        "Answer": "5"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Tally the movie ID and character name in the movie starring Jim Carrey.",
+        "evidence": "",
+        "SQL": "SELECT T2.movie_id, T2.character_name FROM person AS T1 INNER JOIN movie_cast AS T2 ON T1.person_id = T2.person_id WHERE T1.person_name = 'Jim Carrey'",
+        "Answer": "7552,8871,414,310,1850,2123,9894,1624,3594,9273,38,854,8467,8952,3049,17979,11086,10201,22796,10013"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Give the names of the female cast in Movie No. 1865.",
+        "evidence": "female cast refers to gender = 'Female'; name of cast refers to person_name; Movie No. 1865 refers to movie_id = 1865",
+        "SQL": "SELECT T2.person_name FROM movie_cast AS T1 INNER JOIN person AS T2 ON T1.person_id = T2.person_id INNER JOIN gender AS T3 ON T1.gender_id = T3.gender_id WHERE T1.movie_id = 1865 AND T3.gender = 'Female'",
+        "Answer": "Penu00e9lope Cruz,Judi Dench,Emilia Jones"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Write me the titles of the movies starring Jim Carrey.",
+        "evidence": "Jim Carrey is the person_name;",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Jim Carrey'",
+        "Answer": "Fun with Dick and Jane,How the Grinch Stole Christmas,Batman Forever,Bruce Almighty,Man on the Moon,Me, Myself & Irene,The Cable Guy,Liar Liar,The Number 23,Ace Ventura: When Nature Calls,Eternal Sunshine of the Spotless Mind,The Mask,Dumb and Dumber,I Love You Phillip Morris,Ace Ventura: Pet Detective,A Christmas Carol,The Majestic,Yes Man,Simon Birch,Peggy Sue Got Married"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List the director's name of the movies released between 1/01/1916 and 12/31/1925.",
+        "evidence": "director's name refers to person_name where job = 'Director'; released between 1/01/1916 and 12/31/1925 refers to release_date BETWEEN '1916-01-02' AND '1925-12-30'",
+        "SQL": "SELECT T2.person_name FROM movie_cast AS T1 INNER JOIN person AS T2 ON T1.person_id = T2.person_id INNER JOIN movie AS T3 ON T1.movie_id = T3.movie_id INNER JOIN movie_crew AS T4 ON T1.movie_id = T4.movie_id WHERE T4.job = 'Director' AND T3.release_date BETWEEN '1916-01-01' AND '1925-12-31'",
+        "Answer": "Lillian Gish,Mae Marsh,Robert Harron,F.A. Turner,Sam De Grasse,Vera Lewis,Lillian Langdon,Olga Grey,Erich von Ritzau,Bessie Love,Margery Wilson,Eugene Pallette,Spottiswoode Aitken,Ruth Handforth,Elmer Clifton,Seena Owen,Carl Stockdale,Mary Alden,Pearl Elmore,Julia Mackley,Miriam Cooper,Walter Long,Tom Wilson,Ralph Lewis,Lloyd Ingraham,John P. McCarthy,Monte Blue,Marguerite Marsh,Edward Dillon,Billy Quirk,Howard Gaye,William H. Brown,George Walsh,W.S. Van Dyke,Allan Sears,Frank Bennett,Maxfield Stanley,Josephine Crowell,Constance  Talmadge,W.E. Lawrence,Joseph Henabery,Chandler House,Alfred Paget,Tully Marshall,Dore Davidson,Taylor N. Duncan,Owen Moore,Frank Borzage,Karl Brown,Frank Campeau,Constance Collier,Donald Crisp,Nigel De Brulier,Clarence Geldart,Dell Henderson,Russell Hicks,DeWolf Hopper Sr.,Wilfred Lucas,Francis McDonald,Vester Pegg,Herbert Sutch,Herbert Beerbohm Tree,King Vidor,Hal Wilson,Tammany Young,Sylvia Ashton,Jennie Lee,George Beranger,Kitty Bradbury,Tod Browning,Frank Brownlee,Kate Bruce,Edward Burns,Noble Johnson,George Fawcett,Jewel Carmen,Carol Dempster,Mildred Harris,Daisy Jefferson,Carmel Myers,Eve Southern,Pauline Starke,Natalie Talmadge,Ethel Grey Terry,Francis Carpenter,Virginia Lee Corbin,Peggy Cartwright,Gino Corrado,William Courtright,Erich von Stroheim,Max Davidson,Douglas Fairbanks,Julia Faye,Clyde E. Hopkins,Alberta Lee,Elmo Lincoln,Loyola O'Connor,Wallace Reid,Alma Rubens,Madame Sul-Te-Wan,George Siegmann,Raymond Wells,Winifred Westover,David Butler,John Gilbert,Renu00e9e Adoru00e9e,Hobart Bosworth,Claire McDowell,Claire Adams,Robert Ober,Tom O'Brien,Karl Dane,Kathleen Key,Rosita Marstini,Julanne Johnston"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many films released between 1/2/1990 and 12/30/2000 starred Uma Thurman?",
+        "evidence": "released between 1/2/1990 and 12/30/2000 refers to release_date BETWEEN '1990-01-02' AND '2000-12-30'; film has the same meaning as movie; starred Uma Thurman refers to person_name = 'Uma Thurman'",
+        "SQL": "SELECT COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T3.person_name = 'Uma Thurman' AND T1.release_date BETWEEN '1990-01-01' AND '2000-12-31'",
+        "Answer": "3"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Write the titles of horror films with a vote average of more than 7.",
+        "evidence": "horror films refers to genre_name = 'Horror'; vote average of more than 7 refers to vote_average > 7",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T3.genre_name = 'Horror' AND vote_average > 7",
+        "Answer": "28 Days Later,Saw,Alien,A Nightmare on Elm Street,Psycho,Jaws,Interview with the Vampire,Aliens,The Shining,Shaun of the Dead,The Evil Dead,Evil Dead II,Army of Darkness,The Omen,Rosemary's Baby,Videodrome,Halloween,Eraserhead,The Thing,The Devil's Advocate,The Others,Dracula,El orfanato,[REC],They Live,The Exorcist,Night of the Living Dead,The Return of the Living Dead,Zombieland,The Texas Chain Saw Massacre,\u30ad\u30e5\u30a2,Tucker and Dale vs Evil,The Night Visitor,The Conjuring,\uace1\uc131"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Give the genre and popularity of movies whose revenue is at least 120,000,000 between 2012 and 2015.",
+        "evidence": "genre refers to genre_name; revenue is at least 120,000,000 refers to revenue > = 120000000; between 2012 and 2015 refers to release_date BETWEEN '2012-01-01' AND '2015-12-31'",
+        "SQL": "SELECT T3.genre_name, T1.popularity FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T1.revenue > 120000000 AND T1.release_date BETWEEN '2012-01-01' AND '2015-12-31'",
+        "Answer": "Adventure,Fantasy,Action,Adventure,Action,Science Fiction,Adventure,Action,Thriller,Action,Comedy,Science Fiction,Adventure,Action,Thriller,Science Fiction,Action,Thriller,Fantasy,Drama,Horror,Action,War,Drama,Action,Thriller,Crime,Action,Thriller,Drama,Thriller,Science Fiction,Adventure,Fantasy,Action,Adventure,Fantasy,Animation,Comedy,Family,Adventure,Fantasy,Action,Science Fiction,Adventure,Action,Science Fiction,Adventure,Fantasy,Drama,Romance,Fantasy,Horror,Action,Action,War,Adventure,Action,Science Fiction,Adventure,Fantasy,Adventure,Adventure,Animation,Comedy,Family,Adventure,Fantasy,Drama,Action,Thriller,Action,Comedy,Romance,Fantasy,Horror,Action,Adventure,Fantasy,Animation,Action,Comedy,Family,Animation,Family,Fantasy,Comedy,Adventure,Fantasy,Drama,Comedy,Science Fiction,Family,Drama,Romance,Adventure,Fantasy,Drama,Action,Action,Comedy,Crime,Drama,Horror,Thriller,Drama,Western,Adventure,Action,Science Fiction,Drama,Action,Thriller,Science Fiction,Adventure,Action,Science Fiction,Adventure,Fantasy,Family,Drama,Thriller,Adventure,Fantasy,Science Fiction,Adventure,Science Fiction,Mystery,Comedy,Horror,Action,Science Fiction,Fantasy,Comedy,Drama,Horror,Action,Thriller,Science Fiction,Adventure,Action,Science Fiction,Adventure,Action,Thriller,Science Fiction,Drama,Romance,Drama,History,Adventure,Action,Science Fiction,Mystery,Drama,Thriller,Crime,Adventure,Action,Thriller,Adventure,Fantasy,Action,Science Fiction,Drama,History,Adventure,Fantasy,Family,Adventure,Fantasy,Action,Adventure,Action,Thriller,Science Fiction,Fantasy,Animation,Comedy,Family,Comedy,Drama,Thriller,Science Fiction,Adventure,Fantasy,Action,Science Fiction,Drama,Comedy,Fantasy,Animation,Comedy,Family,Animation,Family,Adventure,Animation,Family,Adventure,Action,Science Fiction,Drama,Thriller,Animation,Family,Fantasy,Action,Family,Fantasy,Animation,Family,Action,Thriller,Crime,Adventure,Animation,Comedy,Family,Drama,Comedy,Romance,Drama,Music,Romance,Adventure,Action,Science Fiction,Adventure,Fantasy,Animation,Action,Comedy,Family,Adventure,Animation,Family,Horror,Drama,Science Fiction,Drama,Music,Romance,Adventure,Drama,Adventure,Action,Thriller,Science Fiction,Drama,Adventure,Drama,Action,Adventure,Action,Science Fiction,Animation,Comedy,Family,Action,Science Fiction,Drama,History,Thriller,Adventure,Fantasy,Action,Comedy,Science Fiction,Adventure,Action,Science Fiction,Comedy,Adventure,Action,Science Fiction,Adventure,Action,Science Fiction,Adventure,Fantasy,Action,Adventure,Fantasy,Action,Romance,Family,Adventure,Action,Science Fiction,Adventure,Animation,Family,Drama,Comedy,Crime,Action,Thriller,Action,Comedy,Comedy,Comedy,Crime,Comedy,Adventure,Animation,Family,Animation,Comedy,Family,Comedy,Family,Adventure,Fantasy,Animation,Family,Adventure,Fantasy,Drama,Comedy,Drama,Action,Thriller,Action,Thriller,Adventure,Action,Science Fiction,Drama,Action,Thriller,Science Fiction,Drama,Comedy,Adventure,Fantasy,Action,Adventure,Fantasy,Action,Science Fiction,Adventure,Thriller,Science Fiction,Adventure,Action,Science Fiction,Horror,Adventure,Action,Thriller,Science Fiction,Action,Comedy,Crime,Action,Comedy,Crime,Drama,Action,Thriller,Crime,Comedy,Adventure,Fantasy,Animation,Comedy,Family,Action,Science Fiction,Adventure,Action,Thriller,Comedy,Crime,Horror,Thriller,Drama,Thriller,Crime,Adventure,Drama,Action,Animation,Drama,Comedy,Family,Fantasy,Drama,Romance,Family,Drama,Action,History,War,Action,Thriller,Crime,Adventure,Drama,Science Fiction,Adventure,Action,Science Fiction,Adventure,Science Fiction,Mystery,Family,Animation,Comedy,Family,Adventure,Action,Science Fiction,Action,Action,Comedy,Drama,Crime,Adventure,Animation,Comedy,Family,Adventure,Animation,Action,Comedy,Family,Adventure,Action,Thriller,Adventure,Fantasy,Comedy,Family,Adventure,Action,Action,Comedy,Crime,Action,War,Comedy,Romance,Drama,Action,Thriller,War,Comedy,Comedy,Drama,Comedy,Family,Action,Thriller,Science Fiction,Mystery,Drama,History,Thriller,War,Adventure,Action,Crime,Comedy,Drama,Thriller,Mystery,Adventure,Animation,Comedy,Family,Comedy,Drama,Thriller,Romance,Action,Thriller,Drama,Romance,Fantasy,Comedy,Music,Action,Thriller,Mystery,Comedy,Drama,War,Animation,Drama,Action,War,Fantasy,Animation,Comedy,Science Fiction,Family,Adventure,Animation,Comedy,Family,Comedy,Action,Science Fiction,Action,Thriller,Horror,Adventure,Drama,Drama,Action,Thriller,Comedy,Music,Drama,Comedy,Crime,Romance,Action,Thriller,Crime,Comedy,Action,Comedy,Science Fiction,Adventure,Horror,Comedy,Adventure,Animation,Comedy,Family,Action,Thriller,Adventure,Thriller,Science Fiction,Drama,Comedy,Music,Adventure,Fantasy,Family,Drama,Romance,Adventure,Animation,Comedy,Family,Comedy,Drama,Western,Crime,Mystery,Comedy,Adventure,Fantasy,Action,Drama,Music,Adventure,Drama,Western,Thriller,Adventure,Drama,Science Fiction,Action,Drama,Thriller,Adventure,Drama,Action"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "How many Indian movies between 1/2/1990 and 12/30/2003 have revenue of more than 75,000,000 and popularity of no less than 20?",
+        "evidence": "Indian movies refers to country_name = 'India'; between 1/2/1990 and 12/30/2003 refers to release_date BETWEEN '1990-01-02' AND '2003-12-30'; revenue of more than 75,000,000 refers to revenue > 75000000; popularity of no less than 20 refers to popularity > = 20",
+        "SQL": "SELECT COUNT(T2.movie_id) FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id WHERE T1.revenue > 75000000 AND T1.popularity >= 20 AND T1.release_date BETWEEN '1990-01-01' AND '2003-12-31'",
+        "Answer": "429"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the title of the highest-budget film to date? Please include the revenue and name the country.",
+        "evidence": "highest-budget film refers to max(budget); name the country refers to country_name",
+        "SQL": "SELECT T1.title, T1.revenue, T3.COUNTry_name FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id ORDER BY T1.budget DESC LIMIT 1",
+        "Answer": "Pirates of the Caribbean: On Stranger Tides"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List the title of movies in Latin released between 1/01/1990 and 12/31/1995.",
+        "evidence": "movies in Latin refers to language_name = 'Latin'; released between 1/01/1990 and 12/31/1995 refers to release_date BETWEEN '1990-01-01' AND '1995-12-31'",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Latin' AND T1.release_date BETWEEN '1990-01-01' AND '1995-12-31'",
+        "Answer": "Braveheart,The Godfather: Part III,Cutthroat Island,Dracula,Hoffa,Ri\u00a2hie Ri\u00a2h,Tombstone"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the average revenue of American movies in 2006?",
+        "evidence": "American movies refers to country_name = 'United States of America'; in 2006 refers to release_date LIKE '2006%'; average revenue = AVG(revenue)",
+        "SQL": "SELECT AVG(T1.revenue) FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE T3.COUNTry_name = 'United States of America' AND CAST(STRFTIME('%Y', T1.release_date) AS INT) = 2006",
+        "Answer": "82234025.98404256"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Calculate the 2016 gap between the average revenue for Indian and American films.",
+        "evidence": "2016 refers to release_date LIKE '2016%'; Indian and American films refers to country_name = 'India' and country_name = 'United States of America'; gap between the average revenue refers to subtract(divide(sum(revenue), count(movie_id)) when country_name = 'United States of America', divide(sum(revenue), count(movie_id)) when country_name = 'India')",
+        "SQL": "SELECT AVG(CASE WHEN T3.COUNTry_name = 'United States of America' THEN T1.revenue END) - AVG(CASE WHEN T3.COUNTry_name = 'India' THEN T1.revenue END) AS CALCULATE FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE CAST(STRFTIME('%Y', T1.release_date) AS INT) = 2016",
+        "Answer": "70642665.0"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the percentage of romance films among films produced in India in 2015?",
+        "evidence": "romance films refers to genre_name = 'Romance'; in India refers to country_name = 'India'; 2015 refers to release_date BETWEEN '2015-01-01' AND '2015-01-31'; percentage = divide(sum(movie_id) when genre_name = 'Romance', count(movie_id)) as percentage",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T4.genre_name = 'Romance' THEN T1.movie_id ELSE NULL END) AS REAL) * 100 / COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN production_COUNTry AS T3 ON T1.movie_id = T3.movie_id INNER JOIN genre AS T4 ON T2.genre_id = T4.genre_id INNER JOIN COUNTry AS T5 ON T3.COUNTry_id = T5.COUNTry_id WHERE T5.COUNTry_name = 'India' AND T1.release_date BETWEEN '2015-01-01' AND '2015-12-31'",
+        "Answer": "14.285714285714286"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Which actor plays Optimus Prime?",
+        "evidence": "Which actor refers to person_name; Optimus Prime refers to character_name = 'Optimus Prime (voice)'",
+        "SQL": "SELECT DISTINCT T1.person_name FROM person AS T1 INNER JOIN movie_cast AS T2 ON T1.person_id = T2.person_id WHERE T2.character_name = 'Optimus Prime (voice)'",
+        "Answer": "Peter Cullen"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the gender of the character 'USAF Master Sgt. Epps?'",
+        "evidence": "character 'USAF Master Sgt. Epps' refers to character_name = 'USAF Master Sgt. Epps'",
+        "SQL": "SELECT T2.gender FROM movie_cast AS T1 INNER JOIN gender AS T2 ON T1.gender_id = T2.gender_id WHERE T1.character_name = 'USAF Master Sgt. Epps'",
+        "Answer": "Male"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List all companies who worked in the movie 'Ultramarines: A Warhammer 40,000 Movie.'",
+        "evidence": "all companies refers to company_name; movie 'Ultramarines: A Warhammer 40,000 Movie' refers to title = 'Ultramarines: A Warhammer 40,000 Movie'",
+        "SQL": "SELECT T1.company_name FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T3.title = 'Ultramarines: A Warhammer 40,000 Movie'",
+        "Answer": "POP6,Codex Pictures,Good Story Productions"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Which movie did the company 'Radiant Film GmbH' work on?",
+        "evidence": "Which movie refers to title; company 'Radiant Film GmbH' refers to company_name = 'Radiant Film GmbH'",
+        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Radiant Film GmbH'",
+        "Answer": "Das Boot"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What are the genres of Sky Captain and the World of Tomorrow?",
+        "evidence": "genres refers to genre_name; Sky Captain and the World of Tomorrow refers to title = 'Sky Captain and the World of Tomorrow'",
+        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T1.title = 'Sky Captain and the World of Tomorrow'",
+        "Answer": "Adventure,Action,Thriller,Science Fiction,Mystery"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Write all the keywords belonging to the movie 'Sky Captain and the World of Tomorrow.'",
+        "evidence": "keywords refers to keyword_name; movie 'Sky Captain and the World of Tomorrow' refers to title = 'Sky Captain and the World of Tomorrow'",
+        "SQL": "SELECT T3.keyword_name FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T1.title = 'Sky Captain and the World of Tomorrow'",
+        "Answer": "london england,himalaya,journalist,killer robot,computer war,robot"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "The movie 'Gojira ni-sen mireniamu' is from which country?",
+        "evidence": "movie 'Gojira ni-sen mireniamu' refers to title = 'Gojira ni-sen mireniamu'; which country refers to country_name",
+        "SQL": "SELECT T3.COUNTry_name FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE T1.title = 'Gojira ni-sen mireniamu'",
+        "Answer": "Japan"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Which movie has the keyword 'extremis?'",
+        "evidence": "Which movie refers to title; keyword 'extremis' refers to keyword_name = 'extremis'",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T3.keyword_name = 'extremis'",
+        "Answer": "Iron Man 3"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List 10 movie titles that were produced in France.",
+        "evidence": "France refers to country_name = 'France'",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE T3.COUNTry_name = 'France' LIMIT 10",
+        "Answer": "Dancer in the Dark,The Fifth Element,Billy Elliot,O Brother, Where Art Thou?,The Interpreter,Le fabuleux destin d'Am\u00e9lie Poulain,Oliver Twist,Terminator 2: Judgment Day,Riding Giants,Swimming Pool"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Who is the director for the movie 'Transformers?'",
+        "evidence": "the director refers to person_name where job = 'Director'; movie 'Transformers' refers to title = 'Transformers'",
+        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title = 'Transformers' AND T2.job = 'Director'",
+        "Answer": "Michael Bay"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List 10 crews alongside their jobs who worked on the movie 'Mad Max: Fury Road.'",
+        "evidence": "crews refers to person_name; movie 'Mad Max: Fury Road' refers to title = 'Mad Max: Fury Road'",
+        "SQL": "SELECT T3.person_name FROM movie AS T1 INNER JOIN movie_crew AS T2 ON T1.movie_id = T2.movie_id INNER JOIN person AS T3 ON T2.person_id = T3.person_id WHERE T1.title = 'Mad Max: Fury Road' LIMIT 10",
+        "Answer": "Iain Smith,Ronna Kress,Bruce Berman,John Seale,Dean Semler,Charlie Revai,Jenny Beavan,George Miller,George Miller,George Miller"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What percentage of movies that came from Japan belong in the 'animation' genre?",
+        "evidence": "from Japan refers to country_name = 'Japan'; in the 'animation' genre refers to genre_name = 'animation'; percentage = divide(sum(movie_id) when genre_name = 'animation', count(movie_id)) as percentage",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T4.genre_name = 'Animation' THEN T1.movie_id ELSE NULL END) AS REAL) * 100 / COUNT(T1.movie_id) FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN production_COUNTry AS T3 ON T1.movie_id = T3.movie_id INNER JOIN genre AS T4 ON T2.genre_id = T4.genre_id INNER JOIN COUNTry AS T5 ON T3.COUNTry_id = T5.COUNTry_id WHERE T5.COUNTry_name = 'Japan'",
+        "Answer": "6.962025316455696"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the ratio between male and female cast members of the movie 'Iron Man?' Count how many have unspecified genders.",
+        "evidence": "male refers to gender = 'Male'; female refers to gender = 'Female'; movie 'Iron Man' refers to title = 'Iron Man'; ratio = divide(sum(gender = 'Female'), sum(gender = 'Male'))",
+        "SQL": "SELECT CAST(COUNT(CASE WHEN T3.gender = 'Male' THEN 1 ELSE NULL END) AS REAL) / COUNT(CASE WHEN T3.gender = 'Female' THEN 1 ELSE NULL END) AS RATIO , COUNT(CASE WHEN T3.gender = 'Unspecified' THEN 1 ELSE NULL END) AS UNGENDERS FROM movie AS T1 INNER JOIN movie_cast AS T2 ON T1.movie_id = T2.movie_id INNER JOIN gender AS T3 ON T2.gender_id = T3.gender_id WHERE T1.title = 'Iron Man'",
+        "Answer": "1.875"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List down five movie titles that were released before 2000.",
+        "evidence": "released before 2000 refers to release_date < '2000-01-01'",
+        "SQL": "SELECT title FROM movie WHERE CAST(STRFTIME('%Y', release_date) AS INT) < 2000 LIMIT 5",
+        "Answer": "Four Rooms,Star Wars,Forrest Gump,American Beauty,The Fifth Element"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the keyword ID of the movie with the title of \"Sin City\"?",
+        "evidence": "title of \"Sin City\" refers to title = 'Sin City'",
+        "SQL": "SELECT T2.keyword_id FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'Sin City'",
+        "Answer": "4565,9717,15365,18712,158973,159362,171570,175593,175600,175603,175610,207268"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Look for the movie title with the keyword of \"angel\".",
+        "evidence": "keyword of \"angel\" refers to keyword_name = 'angel'",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T3.keyword_name = 'angel'",
+        "Answer": "City of Angels,It's a Wonderful Life,Dogma,The Prophecy,Frailty,Legion,The Mortal Instruments: City of Bones,The Christmas Candle"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Which keywords belong to the movie titles with the highest popularity?",
+        "evidence": "Which keywords refers to keyword_name; highest popularity refers to max(popularity)",
+        "SQL": "SELECT T3.keyword_name FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id ORDER BY T1.popularity DESC LIMIT 1",
+        "Answer": "assistant"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Provide the genre ID of the movie with the title of \"The Dark Knight\".",
+        "evidence": "movie with the title of \"The Dark Knight\" refers to title = 'The Dark Knight'",
+        "SQL": "SELECT T2.genre_id FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'The Dark Knight'",
+        "Answer": "18,28,53,80"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List down the movie titles within the genre of thriller.",
+        "evidence": "genre of thriller refers to genre_name = 'Thriller'",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T3.genre_name = 'Thriller'",
+        "Answer": "The Fifth Element,Amores perros,A History of Violence,Absolute Power,War of the Worlds,Memento,Blade Runner,Open Water,Armageddon,Lola rennt,Predator,Snatch,Scarface,Match Point,The Untouchables,Star Trek II: The Wrath of Khan,The Dark Knight,Star Trek III: The Search for Spock,Ocean's Eleven,Ocean's Twelve,Predator 2,28 Days Later,Star Trek V: The Final Frontier,Star Trek VI: The Undiscovered Country,The Interpreter,Minority Report,The Good German,Lucky Number Slevin,Sin City,Sin City: A Dame to Kill For,Star Trek: Generations,Star Trek: First Contact,Star Trek: Insurrection,Star Trek: Nemesis,Saw III,The Terminator,Syriana,The Godfather: Part III,Ghost,Live and Let Die,The Silence of the Lambs,Underworld,Terminator 2: Judgment Day,Terminator 3: Rise of the Machines,Ocean's Thirteen,Swimming Pool,True Romance,Insomnia,Mystic River,Snakes on a Plane,Brother,Jurassic Park III,Alien,Inside Man,Kill Bill: Vol. 2,Cube,The Day After Tomorrow,Mar\u00eda, llena eres de gracia,Aliens vs Predator: Requiem,21 Grams,Pi,Shaft,Reservoir Dogs,Poseidon,Killing Zoe,Terminator Salvation,Psycho,Die Hard,Starship Troopers,Frenzy,To Die For,Jaws,Jaws 2,Jaws: The Revenge,Das Leben der Anderen,2 Fast 2 Furious,The Da Vinci Code,Titanic,The Matrix Reloaded,The Matrix Revolutions,Munich,The Bodyguard,The Ninth Gate,The Usual Suspects,Dr. No,From Russia with Love,Goldfinger,Thunderball,Saw IV,You Only Live Twice,On Her Majesty's Secret Service,\uc62c\ub4dc\ubcf4\uc774,Aliens,Pulp Fiction,Diamonds Are Forever,The Man with the Golden Gun,The Spy Who Loved Me,The Shining,Moonraker,For Your Eyes Only,Octopussy,A View to a Kill,The Living Daylights,Licence to Kill,GoldenEye,Tomorrow Never Dies,The Sixth Sense,V for Vendetta,Face/Off,From Dusk Till Dawn,From Hell,Gattaca,Mr. & Mrs. Smith,The Omen,Cruel Intentions,Se7en,Sleepers,JFK,Underworld: Evolution,The X Files,WarGames,Planet of the Apes,Die B\u00fcchse der Pandora,Lethal Weapon 3,Lethal Weapon 4,Halloween,Mission: Impossible,Mission: Impossible II,Mission: Impossible III,Irr\u00e9versible,Mulholland Drive,The French Connection,Arlington Road,The Thirteenth Floor,Catch a Fire,The Prestige,The Talented Mr. Ripley,Hannibal Rising,Ghost Rider,Street Kings,Sunshine,American Psycho,First Blood,Rambo: First Blood Part II,Rambo III,Blood Diamond,The Departed,November,The Illusionist,Spy Game,Changing Lanes,Collateral,Flatliners,28 Weeks Later,Live Free or Die Hard,Die Hard: With a Vengeance,Die Hard 2,Apocalypto,Secret Window,Cape Fear,The 51st State,The Way of the Gun,Hitman,The Island,Speed 2: Cruise Control,The Net,A Time to Kill,The Hunt for Red October,Anatomie,Con Air,Copycat,All the King's Men,Michael Collins,The Devil's Advocate,Phone Booth,Lord of War,World Trade Center,Red Dawn,Traffic,Vanilla Sky,The Beach,The Others,eXistenZ,Crank,Zodiac,The Butterfly Effect,Enough,8 femmes,The Grudge,The Grudge 2,4: Rise of the Silver Surfer,The Constant Gardener,A Mighty Heart,Lara Croft: Tomb Raider,Lara Croft Tomb Raider: The Cradle of Life,In the Bedroom,We Own the Night,Wu Ji,Hostage,Training Day,Along Came a Spider,Original Sin,National Treasure,X-Men Origins: Wolverine,Birthday Girl,Romeo Must Die,Romeo Is Bleeding,The Last Castle,Payback,Final Fantasy: The Spirits Within,Out of Time,L.A. Confidential,The Whole Ten Yards,Kiss of the Dragon,Reindeer Games,Chill Factor,Breakdown,The Glass House,Big Trouble,16 Blocks,Unfaithful,Eastern Promises,Valkyrie,The General's Daughter,Executive Decision,Topaz,Harley Davidson and the Marlboro Man,The Bourne Identity,The Bourne Supremacy,The Bourne Ultimatum,The Tailor of Panama,Code 46,The Specialist,The Game,Hard Candy,What Lies Beneath,Signs,15 Minutes,The Abyss,The Curse of the Jade Scorpion,Pierrot le fou,Pitch Black,Identity,The Astronaut's Wife,Roar,1408,\u041d\u043e\u0447\u043d\u043e\u0439 \u0434\u043e\u0437\u043e\u0440,Basic Instinct 2,Bad Company,Dirty Pretty Things,The Train,88 Minutes,A Scanner Darkly,Under Siege 2: Dark Territory,U-571,The Number 23,Ransom,I Know What You Did Last Summer,I Still Know What You Did Last Summer,Black Rain,The Transporter,Road to Perdition,Trade,Spellbound,Charlie's Angels,The Kingdom,The Brothers Grimm,The Devil's Own,30 Days of Night,Panic Room,\uce5c\uc808\ud55c \uae08\uc790\uc528,The Machinist,Armored,The Sum of All Fears,Jindabyne,Southland Tales,The Jackal,Layer Cake,The Invasion,Dark Blue,Confessions of a Dangerous Mind,The Curious Case of Benjamin Button,The International,Impostor,Gothika,Wonderland,Severance,Rendition,Sky Captain and the World of Tomorrow,Rush Hour 3,Rush Hour 2,Gosford Park,The Hunting Party,The Fugitive,The Ladykillers,RoboCop 3,Space Cowboys,Beyond the Valley of the Dolls,Torn Curtain,The Sentinel,Angel Eyes,Family Plot,The Mist,The Great Escape,The Pledge,The Good Thief,Kiss of Death,Dreamcatcher,Cat People,I Am Legend,The Contender,El orfanato,Idle Hands,The Peacemaker,Transsiberian,One Missed Call,The Village,Outbreak,Der Baader Meinhof Komplex,In the Valley of Elah,No Country for Old Men,White Noise 2: The Light,Cloverfield,Duplex,Equilibrium,Running Scared,Alive,The Rage: Carrie 2,Brothers,xXx,Vantage Point,Shooter,Knockaround Guys,Smokin' Aces,Die Welle,Harsh Times,The Wolfman,Behind Enemy Lines,Get Shorty,Desperado,Suspect Zero,You Kill Me,Ronin,Midnight in the Garden of Good and Evil,The Quiet American,8MM,Disturbia,The Spirit,They Live,Blindness,The Boondock Saints,I Spy,Funny Games,John Q,Dick Tracy,The Exorcism of Emily Rose,The Happening,K-19: The Widowmaker,Taken,The League of Extraordinary Gentlemen,Albino Alligator,Mad Max 2,Timecop,Conspiracy Theory,The X Files: I Want to Believe,Mercury Rising,The Cell,The Bank Job,The Shadow,Eight Legged Freaks,Red Planet,Timber Falls,Wanted,Deep Blue Sea,Jeepers Creepers,Bad Boys II,Crimson Tide,Boogeyman,The Marine,Assault on Precinct 13,\u0e15\u0e49\u0e21\u0e22\u0e33\u0e01\u0e38\u0e49\u0e07,Disclosure,The River Wild,Derailed,The Insider,Dark Water,All the Boys Love Mandy Lane,The Eye,The Cave,DOA: Dead or Alive,Tales from the Crypt: Demon Knight,Zwartboek,Mary Reilly,The Craft,Buffalo Soldiers,Broken Arrow,S.W.A.T.,Eraser,Virtuosity,Death to Smoochy,Femme Fatale,Witness,11:14,Bound,Smilla's Sense of Snow,Flightplan,Clear and Present Danger,Transporter 2,The Core,Cliffhanger,One Hour Photo,Anaconda,Donnie Brasco,El Mariachi,Thir13en Ghosts,Babylon A.D.,Hollow Man,The Man Who Knew Too Little,Go,Grosse Pointe Blank,Kiss the Girls,The Big Hit,The Corruptor,The Bone Collector,The Crow,Man on Fire,The Matador,Red Dragon,FearDotCom,The Adventures of Ford Fairlane,The Exorcist,The Fan,Blood Work,Double Impact,Spider,The Fast and the Furious: Tokyo Drift,The Order,Dante's Peak,Paycheck,The Juror,On Deadly Ground,The Glimmer Man,The Negotiator,Ghost Ship,Black Christmas,Mad Max,The Jacket,Gone in Sixty Seconds,Pulse,Assassins,Children of Men,Lady in the Water,Bound by Honor,Swordfish,Bubba Ho-tep,My Summer of Love,Friday the 13th Part 2,Friday the 13th Part III,Where the Truth Lies,Friday the 13th: The Final Chapter,Friday the 13th: A New Beginning,Bad Boys,Unbreakable,Firewall,Cellular,Mad City,Air Force One,The Night Listener,Sublime,The Hills Have Eyes,The Hills Have Eyes II,Enemy of the State,The Fast and the Furious,The Rock,The Quiet,Lake Placid,United 93,The Phantom of the Opera,Patriot Games,Urban Legend,Striptease,The Siege,Collateral Damage,The Cable Guy,Man of the Year,Wrong Turn,The Skeleton Key,Ultraviolet,Legal Eagles,The Pelican Brief,Vampires,The Covenant,Premonition,The Saint,An American Haunting,The Pacifier,Very Bad Things,Banlieue 13,When a Stranger Calls,Escape from L.A.,The Amityville Horror,Stay Alive,A Nightmare on Elm Street 3: Dream Warriors,A Sound of Thunder,Cry_Wolf,A Nightmare on Elm Street 4: The Dream Master,Cypher,Road House,The Rundown,A Nightmare on Elm Street 5: The Dream Child,The Lawnmower Man,Half Past Dead,The Midnight Meat Train,The Day the Earth Stood Still,Ravenous,A Simple Plan,Friday the 13th Part VI: Jason Lives,Haute tension,\ub514\uc6cc,Summer of Sam,Thinner,Friday the 13th Part VII: The New Blood,Friday the 13th Part VIII: Jason Takes Manhattan,Jason Goes to Hell: The Final Friday,Poltergeist III,The Ring Two,Congo,Spawn,Volcano,D-Tox,Lost Souls,Supernova,The Limey,Bless the Child,Double Jeopardy,Nowhere to Run,The Death and Life of Bobby Z,Hackers,War,Get Carter,Nurse Betty,Death Race,Bats,The Andromeda Strain,Ballistic: Ecks vs. Sever,Frequency,Dracula 2000,Child's Play,The Medallion,Veronica Guerin,The Hunted,Subway,[REC]\u00b2,Courage Under Fire,The Watcher,Firefox,Darkness Falls,The Client,Birth,Confidence,The Haunted Mansion,Without a Paddle,Quantum of Solace,The Tuxedo,Basic,Lucky Numbers,The One,Maximum Risk,Joy Ride,Switchback,Exit Wounds,Shutter,May,In the Cut,Ripley's Game,Valentine,Halloween: The Curse of Michael Myers,Fatal Attraction,Commando,The Relic,Narc,Exorcist: The Beginning,Dressed to Kill,Godsend,City Hall,O,Hide and Seek,Ladder 49,Laws of Attraction,\u0412\u043e\u0437\u0432\u0440\u0430\u0449\u0435\u043d\u0438\u0435,Wicker Park,The Trouble with Harry,Daylight,Freeway,Anacondas: The Hunt for the Blood Orchid,Hard Rain,Freddy's Dead: The Final Nightmare,Extreme Measures,Shutter Island,The Dead Zone,Jeepers Creepers 2,Halloween 4: The Return of Michael Myers,Walking Tall,Halloween 5: The Revenge of Michael Myers,The Count of Monte Cristo,The Score,Hollywood Homicide,House on Haunted Hill,Bullets Over Broadway,The Crying Game,The Long Kiss Goodnight,The Ghost Writer,Halloween: Resurrection,Domestic Disturbance,People I Know,Red Eye,Salton Sea,The Skulls,Firestarter,Body Double,Book of Shadows: Blair Witch 2,Rollerball,High Crimes,Class of 1984,The First Great Train Robbery,Exorcist II: The Heretic,The I Inside,Serial Mom,New Nightmare,Stir of Echoes,The Life of David Gale,The Haunting,Blow Out,Get Smart,Street Fighter,Vertical Limit,xXx: State of the Union,The Replacement Killers,White Noise,Sexy Beast,Death Sentence,Jade,Flight of the Phoenix,Murder by Numbers,Young Sherlock Holmes,Saw V,Capricorn One,Lifeforce,Into the Blue,Thirteen Days,The Rainmaker,The Prophecy,Proof of Life,Fortress,Don't Say a Word,Body of Lies,Instinct,Chain Reaction,3000 Miles to Graceland,Alone in the Dark,Frailty,The Hurt Locker,Pathology,Edge of Darkness,9,The Oxford Murders,Shotgun Stories,A Perfect Getaway,Underworld: Rise of the Lycans,The Forsaken,Freeze Frame,Dead Man's Shoes,Split Second,Eagle Eye,Brooklyn Rules,The Life Before Her Eyes,Pride and Glory,Showdown in Little Tokyo,Bangkok Dangerous,War, Inc.,10th & Wolf,Butterfly on a Wheel,Lakeview Terrace,Righteous Kill,Donkey Punch,Angels & Demons,Doomsday,Awake,Eden Lake,Mirrors,Straightheads,The Dead Girl,Thr3e,The Unborn,\u653e\u2027\u9010,RockNRolla,Knowing,Quarantine,Repo Man,Race to Witch Mountain,The Cottage,Raising Cain,Soul Survivors,Nancy Drew,Man on Wire,Los cronocr\u00edmenes,Impact Point,Dragonball Evolution,Boiler Room,Cecil B. Demented,The Red Violin,Poolhall Junkies,Primer,The Manchurian Candidate,Shade,London to Brighton,Lone Wolf McQuade,G.I. Joe: The Rise of Cobra,Clockstoppers,Undisputed,Extreme Ops,Crank: High Voltage,Phantasm II,Street Fighter: The Legend of Chun-Li,Twilight Zone: The Movie,Owning Mahowny,Paparazzi,Made,Invasion U.S.A.,Abandon,They,Zero Effect,The Boys from Brazil,Serenity,Ong Bak 2,The Proposition,Mindhunters,Inglourious Basterds,Drag Me to Hell,Obitaemyy Ostrov,12 Rounds,Eye for an Eye,Force 10 from Navarone,The Devil's Tomb,Fifty Dead Men Walking,Brokedown Palace,Gossip,The Dark Hours,Nueve Reinas,Edmond,Alone With Her,The Last House on the Left,Decoys,The Taking of Pelham 1 2 3,Gamer,Fled,No Man's Land: The Rise of Reeker,Eye of the Beholder,Slow Burn,Jimmy and Judy,Flight of the Intruder,Light It Up,The Yards,Pandorum,Daybreakers,The Stepfather,Surrogates,Niagara,The Betrayed,\u65b0\u5bbf\u4e8b\u4ef6,Chocolate: Deep Dark Secrets,The Book of Eli,Jonah Hex,Swimfan,Sleep Dealer,Novocaine,The Call of Cthulhu,Orphan,Stone Cold,Nighthawks,Train,In Too Deep,Kansas City,Dinner Rush,Whiteout,Law Abiding Citizen,Gentlemen Broncos,The Boondock Saints II: All Saints Day,The Fourth Kind,The Box,Ninja Assassin,Takers,The Cabin in the Woods,Green Zone,The Town,Sucker Punch,Machete,Silent Trigger,Cirque du Freak: The Vampire's Assistant,Raise the Titanic,Tales from the Hood,The Caveman's Valentine,Deterrence,Carriers,Harry Brown,Point Blank,Harper,Buried,From Paris with Love,Brooklyn's Finest,Clay Pigeons,Sorority Row,Brigham City,Ca$h,Inception,Malone,Lake Mungo,Salt,The Expendables,The American,The Mechanic,A Thin Line Between Love and Hate,Chloe,Case 39,In Dreams,The Omega Code,Gun Shy,The Spanish Prisoner,Due occhi diabolici,Exam,Snabba Cash,Civil Brand,Megiddo: The Omega Code 2,The Business of Strangers,I Come with the Rain,Blood and Wine,Repo Men,City of Ghosts,\ud574\uc6b4\ub300,\u7d05\u756a\u5340,Cargo,Turbulence,Nine Dead,The Losers,Predators,The Missing Person,Don McKay,Letters to God,The In Crowd,\u30ad\u30e5\u30a2,After.Life,Yesterday Was a Lie,Casino Royale,Interview with the Assassin,Blade II,The World Is Not Enough,Blade: Trinity,X2,X-Men: The Last Stand,Die Another Day,Never Say Never Again,True Lies,The Firm,The Killer Inside Me,Knock Off,Super 8,Splice,The Tourist,Skyfall,Killers,Chain Letter,The Adjustment Bureau,Shadow Conspiracy,Priest,The Last Exorcism,Fair Game,Rampage,Men of War,Sorcerer,2:13,Sugar Hill,Beloved,RED,Contagion,Meteor,Royal Kill,Faster,Paranormal Activity 2,The Statement,Darling Lili,Chicago Overcoat,Carlos,The Next Three Days,Fabled,My Soul to Take,Monsters,Dylan Dog: Dead of Night,I Spit on Your Grave,Devil,Unstoppable,127 Hours,Black Swan,\u4e09\u67aa\u62cd\u6848\u60ca\u5947,Battleship,Green Lantern,Trust,Gli intoccabili,The Pursuit of D.B. Cooper,Machine Gun Preacher,Source Code,The Hole,Don't Be Afraid of the Dark,All Good Things,The Warrior's Way,I Am Number Four,Drive Angry,Sphinx,A Good Day to Die Hard,Unknown,The Rite,A Dangerous Method,The Debt,Prison,Sanctum,Red State,Hobo with a Shotgun,Insidious,Killer Elite,The Dark Knight Rises,The Bourne Legacy,Gravity,Lady in White,Tinker Tailor Soldier Spy,Premium Rush,Man on a Ledge,In Time,Red Riding Hood,The Reef,The Roommate,The Lincoln Lawyer,Apollo 18,Hanna,When the Lights Went Out,Sur le seuil,Grave Encounters,Martha Marcy May Marlene,Margin Call,Higher Ground,Creature,Open Secret,Fast Five,Hav Plenty,Salvation Boulevard,Stake Land,The Three Musketeers,The Pet,Malevolence,Betty Fisher et autres histoires,Mission: Impossible - Ghost Protocol,In Her Line of Fire,Crying with Laughter,Area 51,Johnny English Reborn,The Innkeepers,Pride and Prejudice and Zombies,The Hit List,Safe House,Abduction,Looper,Arbitrage,Silent Hill: Revelation 3D,Rise of the Planet of the Apes,Anonymous,Tracker,The Devil's Double,Limbo,Brighton Rock,Colombiana,Rien ne va plus,Straw Dogs,Killing Them Softly,Drive,Take Shelter,Shark Night,The Woman in Black,The Girl with the Dragon Tattoo,The Perfect Host,N-Secure,Cavite,This Thing of Ours,The Guard,Elysium,Trance,Argo,The Iceman,Lies in Plain Sight,Dream House,Bullet to the Head,Haywire,The Raven,Hodejegerne,The Last Godfather,The Darkest Hour,Fascination,Ghost Rider: Spirit of Vengeance,We Need to Talk About Kevin,World War Z,Safe,G.I. Joe: Retaliation,The Host,Killer Joe,The Son of No One,Kill List,Absentia,The Grey,Red Lights,Now You See Me,Act of Valor,Jack Reacher,Love Letters,The Expendables 2,Mad Max: Fury Road,The Devil Inside,Texas Chainsaw 3D,The Last Stand,Chronicle,End of Watch,Alien Zone,Mientras duermes,Contraband,The Possession,The Cold Light of Day,The Awakening,Only God Forgives,Twixt,Nurse 3-D,We Have Your Husband,The Apparition,Lo imposible,Some Guy Who Kills People,A Lonely Place to Die,Lockout,House at the End of the Street,Sinister,Savages,Taken 2,Gangster Squad,The Words,Black Rock,Compliance,Grabbers,All Superheroes Must Die,Stoker,Terminator Genisys,Riddick,The East,Insidious: Chapter 2,Snow White: A Deadly Summer,Chernobyl Diaries,Serbuan maut,Alex Cross,Under the Skin,Deadfall,Zero Dark Thirty,Broken City,Enter Nowhere,I, Frankenstein,Coriolanus,Truth or Dare,Dead Man Down,The Lords of Salem,Machete Kills,Below Zero,Escape Plan,The Counselor,Side Effects,Captain Phillips,The Canyons,White House Down,Olympus Has Fallen,After,Bait,Dawn of the Planet of the Apes,$upercapitalist,Inescapable,Stolen,The Brass Teapot,The Hunger Games: Mockingjay - Part 1,Pain & Gain,Snitch,The Collection,Jurassic World,Trade Of Innocents,Need for Speed,No Good Deed,Jack Ryan: Shadow Recruit,The Expendables 3,The Conjuring,Sabotage,Triple 9,The Last Exorcism Part II,RED 2,Prisoners,Runner Runner,The Haunting in Connecticut 2: Ghosts of Georgia,The Frozen,The Equalizer,Transcendence,The Vatican Tapes,A Most Wanted Man,Show Me,The Call,The Purge,The Fifth Estate,Out of the Furnace,A Walk Among the Tombstones,The Green Inferno,Enter the Dangerous Mind,Mission: Impossible - Rogue Nation,Child 44,Arnolds Park,Deliver Us from Evil,Zulu,Blue Ruin,The Last Days on Mars,Blood Ties,3 Days to Kill,No Escape,Open Road,Hayride,Lone Survivor,The Maze Runner,The Frozen Ground,Homefront,Before I Go to Sleep,Our Kind of Traitor,The Imitation Game,In the Heart of the Sea,The Sisterhood of Night,Zombie Hunter,Trash,Banshee Chapter,Viy,Gone Girl,Plush,Fifty Shades of Grey,Into the Storm,Left Behind,Slow West,Taxman,Non-Stop,Backmask,Paranormal Activity: The Marked Ones,Project Almanac,Victor Frankenstein,Demonic,Addicted,Self/less,The Purge: Anarchy,A Most Violent Year,The Boy Next Door,The Prince,Regression,Run All Night,Lords of London,The Signal,Red Sky,Nightcrawler,The Lazarus Effect,Into the Grizzly Maze,Strangerland,Kill the Messenger,Locker 13,Housebound,Good Kill,The Face of an Angel,San Andreas,The November Man,Escobar: Paradise Lost,As Above, So Below,Swelter,Wicked Blood,Point Break,Taken 3,Something Wicked,Insurgent,Aut\u00f3mata,Room,Wild Card,La chambre bleue,London Has Fallen,It Follows,Echo Dr.,Ask Me Anything,Sicario,Legend,Z \u98a8\u66b4,Unfriended,Da Sweet Blood of Jesus,The Maid's Room,Insidious: Chapter 3,House at the End of the Drive,Fugly,The Revenant,The Calling,Out of the Dark,The Gambler,The Walk,Grindhouse,Sanctuary: Quite a Conundrum,The Transporter Refueled,H.,Run, Hide, Die,Yoga Hosers,\u4e00\u500b\u4eba\u7684\u6b66\u6797,Red Riding: In the Year of Our Lord 1974,Now You See Me 2,Bridge of Spies,Dying of the Light,The Visit,The Gallows,Born Of War,Shark Lake,13 Hours: The Secret Soldiers of Benghazi,The Finest Hours,#Horror,The Neon Demon"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Write down five rumoured movie titles within the genre of Drama.",
+        "evidence": "rumoured movie refers to movie_status = 'rumoured'; genre of Drama refers to genre_name = 'Drama'",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T1.movie_status = 'Rumored' AND T3.genre_name = 'Drama' LIMIT 5",
+        "Answer": "Crying with Laughter,The Naked Ape"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the genre of the movie title with the lowest revenue generated?",
+        "evidence": "genre refers to genre_name; lowest revenue refers to min(revenue)",
+        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id ORDER BY T1.revenue LIMIT 1",
+        "Answer": "Comedy"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "State the genre of the movie title with a runtime of only 14 minutes.",
+        "evidence": "genre refers to genre_name; runtime of only 14 minutes refers to runtime = 14",
+        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id WHERE T1.runtime = 14",
+        "Answer": "Horror,Science Fiction"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the genre of the movie title which was well-received by the audiences but made the lowest revenue?",
+        "evidence": "genre refers to genre_name; well-received by the audiences refers to max(vote_average); lowest revenue refers to min(revenue)",
+        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T2.genre_id = T3.genre_id ORDER BY T1.vote_average DESC, T1.revenue LIMIT 1",
+        "Answer": "Comedy"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Provide the genre of a movie title with a tagline of \"A long time ago in a galaxy far, far away\u2026\".",
+        "evidence": "genre refers to genre_name; tagline of \"A long time ago in a galaxy far, far away\u2026\" refers to tagline = 'A long time ago in a galaxy far, far away\u2026'",
+        "SQL": "SELECT T3.genre_name FROM movie AS T1 INNER JOIN movie_genres AS T2 ON T1.movie_id = T2.movie_id INNER JOIN genre AS T3 ON T3.genre_id = T2.genre_id WHERE T1.tagline = 'A long time ago in a galaxy far, far away...'",
+        "Answer": "Adventure,Action,Science Fiction"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the country ID of the movie with the title of \"Pirates of the Caribbean: Dead Man's Chest\"?",
+        "evidence": "title of \"Pirates of the Caribbean: Dead Man's Chest\" refers to title = 'Pirates of the Caribbean: Dead Man''s Chest'",
+        "SQL": "SELECT T2.COUNTry_id FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title LIKE 'Pirates of the Caribbean: Dead Man%s Chest'",
+        "Answer": "175,214,140,153"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List down the movie titles that were produced in Canada.",
+        "evidence": "produced in Canada refers to country_name = 'Canada'",
+        "SQL": "SELECT T1.title FROM movie AS T1 INNER JOIN production_COUNTry AS T2 ON T1.movie_id = T2.movie_id INNER JOIN COUNTry AS T3 ON T2.COUNTry_id = T3.COUNTry_id WHERE T3.COUNTry_name = 'Canada'",
+        "Answer": "My Life Without Me,A History of Violence,Brokeback Mountain,Hotel Rwanda,Mambo Italiano,AVP: Alien vs. Predator,Capote,Cube,Good Will Hunting,Silent Hill,Munich,Videodrome,The X Files,A Christmas Story,American Psycho,Frida,Resident Evil: Apocalypse,The 51st State,eXistenZ,The Butterfly Effect,Along Came a Spider,The Whole Nine Yards,Eastern Promises,In the Name of the King: A Dungeon Siege Tale,Scary Movie 2,The Assassination of Jesse James by the Coward Robert Ford,Wonderland,The Good Thief,Freddy vs. Jason,White Noise 2: The Light,1947: Earth,Water,Highlander III: The Sorcerer,The Imaginarium of Doctor Parnassus,Married Life,Jumper,Blindness,My Big Fat Greek Wedding,The Boondock Saints,K-19: The Widowmaker,Snake Eyes,The Thin Red Line,The X Files: I Want to Believe,Slither,Eraser,11:14,Final Destination 3,The Core,Thir13en Ghosts,Deep Rising,Spider,Paycheck,Black Christmas,Les triplettes de Belleville,Urban Legend,Rat Race,Elektra,Antitrust,The Wraith,The Pacifier,Good Luck Chuck,Talk Radio,The Day the Earth Stood Still,The Sweet Hereafter,Porky's,Fido,Double Jeopardy,War,Driven,Confidence,Exit Wounds,All Hat,Agent Cody Banks,Nothing,Narc,Les Invasions barbares,The Last Temptation of Christ,Godsend,A Cinderella Story,The Hotel New Hampshire,The Art of War,The Skulls,Class of 1984,Get Smart,Land of the Dead,White Noise,Heavy Metal,Renaissance Man,Snow Dogs,Iris,Bride of Chucky,It's All Gone Pete Tong,Alone in the Dark,Urban Legends: Final Cut,Stargate: The Ark of Truth,Max Payne,Punisher: War Zone,Butterfly on a Wheel,Ice Princess,Shattered Glass,Superstar,2012,The Painted Veil,The Red Violin,New in Town,Dirty Work,Passchendaele,In the Company of Men,Partition,September Dawn,Bon Cop Bad Cop,Mystery, Alaska,Street Fighter: The Legend of Chun-Li,Owning Mahowny,Jack Brooks: Monster Slayer,Ararat,Dick,Life or Something Like It,Return to Never Land,Easy Virtue,How She Move,Fifty Dead Men Walking,District 9,The Dark Hours,Night at the Museum: Battle of the Smithsonian,Decoys,The Cry of the Owl,Morvern Callar,A Dog's Breakfast,Eye of the Beholder,Josie and the Pussycats,I Love You, Beth Cooper,Slackers,Exotica,Air Bud,Aliens in the Attic,Smoke Signals,Orphan,Scott Pilgrim vs. the World,Whiteout,Saw VI,A Room for Romeo Brass,Pontypool,Stan Helsing,Silent Trigger,April Fool's Day,Saint Ralph,The Blue Butterfly,Jesus' Son,Love Happens,King's Ransom,Chloe,Case 39,Survival of the Dead,The Visual Bible: The Gospel of John,Repo Men,Percy Jackson & the Olympians: The Lightning Thief,Nowhere Boy,Losin' It,Men with Brooms,Enter the Void,Defendor,Resident Evil: Afterlife,X-Men: The Last Stand,A Shine of Rainbows,Splice,The Divide,Rampage,Free Style,Out of the Blue,Clean,Saw 3D,The Statement,Def-Con 4,Gunless,The Claim,Casino Jack,Source Code,Incendies,Barney's Version,Tucker and Dale vs Evil,Love and Death on Long Island,Felicia's Journey,La veuve de Saint-Pierre,A Dangerous Method,Hobo with a Shotgun,Insidious,Maurice Richard,Red Riding Hood,Beyond the Black Rainbow,Apollo 18,Sur le seuil,Grave Encounters,Dracula: Pages from a Virgin's Diary,Silent Hill: Revelation 3D,La Guerre du feu,30 Minutes or Less,The Woman in Black,Beat the World,Escape from Planet Earth,Pacific Rim,Warcraft,Seventh Son,Dream House,Resident Evil: Retribution,The Grey,Pompeii,The Possession,Indie Game: The Movie,Warm Bodies,Big Eyes,Pink Ribbons, Inc.,L!fe Happens,RoboCop,Eddie: The Sleepwalking Cannibal,The Lords of Salem,Below Zero,Inescapable,Antiviral,Mama,Crowsnest,RED 2,Interstellar,The Young and Prodigious T.S. Spivet,Show Me,The Dirties,Treading Water,Brooklyn,The Green Inferno,Independence Daysaster,Sausage Party,The Nut Job,Regression,Into the Grizzly Maze,Against the Wild,American Heist,In the Name of the King III,San Andreas,Brick Mansions,Drive Hard,The Legend of Tarzan,The Conjuring 2,Room,Bang Bang Baby,Insidious: Chapter 3,The Revenant,The Calling,Mutant World,Wolves,Now You See Me 2"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Accumulate the budget of the movie titles with the keyword of \"video game\".",
+        "evidence": "keyword of \"video game\" refers to keyword_name = 'video game'",
+        "SQL": "SELECT SUM(T1.budget) FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T3.keyword_name = 'video game'",
+        "Answer": "363500000"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "For movies with the keyword of \"civil war\", calculate the average revenue generated by these movies.",
+        "evidence": "keyword of \"civil war\" refers to keyword_name = 'civil war'; average revenue = AVG(revenue)",
+        "SQL": "SELECT AVG(T1.revenue) FROM movie AS T1 INNER JOIN movie_keywords AS T2 ON T1.movie_id = T2.movie_id INNER JOIN keyword AS T3 ON T2.keyword_id = T3.keyword_id WHERE T3.keyword_name = 'civil war'",
+        "Answer": "129950554.3076923"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Find out the popularity of the movies with the highest vote count.",
+        "evidence": "highest vote count refers to max(vote_count)",
+        "SQL": "SELECT popularity FROM movie ORDER BY vote_COUNT DESC LIMIT 1",
+        "Answer": "167.58371"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Among the zero-budget movie titles, which one has made the highest revenue?",
+        "evidence": "zero-budget refers to budget = 0; highest revenue refers to max(revenue)",
+        "SQL": "SELECT title FROM movie WHERE budget = 0 ORDER BY revenue DESC LIMIT 1",
+        "Answer": "Wild Hogs"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the ID of the production company which produced the movie \"Gladiator\"?",
+        "evidence": "ID of the production company refers to company_id; movie \"Gladiator\" refers to title = 'Gladiator'",
+        "SQL": "SELECT T2.company_id FROM movie AS T1 INNER JOIN movie_company AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'Gladiator'",
+        "Answer": "14440,1645,21904,21905,21906,27,33"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List down the IDs of the production companies that released the movies in 1916.",
+        "evidence": "IDs of the production companies refers to company_id; movies in 1916 refers to release_date LIKE '1916%'",
+        "SQL": "SELECT T2.company_id FROM movie AS T1 INNER JOIN movie_company AS T2 ON T1.movie_id = T2.movie_id WHERE CAST(STRFTIME('%Y', T1.release_date) AS INT) = 1916",
+        "Answer": "1307,1308"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List down the movies produced by Lucasfilm.",
+        "evidence": "movies refers to title; produced by Lucasfil refers to company_name = 'Lucasfilm'",
+        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Lucasfilm'",
+        "Answer": "Star Wars,Raiders of the Lost Ark,Indiana Jones and the Temple of Doom,Indiana Jones and the Last Crusade,Indiana Jones and the Kingdom of the Crystal Skull,American Graffiti,The Empire Strikes Back,Return of the Jedi,Star Wars: Episode I - The Phantom Menace,Star Wars: Episode II - Attack of the Clones,Star Wars: Episode III - Revenge of the Sith,Howard the Duck,The Land Before Time,Red Tails"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Among Warner Bros. Pictures' movies, which title made the highest revenue?",
+        "evidence": "Warner Bros. Pictures' movies refers to company_name = 'Warner Bros. Pictures'; highest revenue refers to max(revenue)",
+        "SQL": "SELECT T3.title FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Warner Bros. Pictures' ORDER BY T3.revenue DESC LIMIT 1",
+        "Answer": "The Hobbit: An Unexpected Journey"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Write down the release date of the movies produced by Twentieth Century Fox Film Corporation.",
+        "evidence": "produced by Twentieth Century Fox Film Corporation refers to company_name = 'Twentieth Century Fox Film Corporation'",
+        "SQL": "SELECT T3.release_date FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name = 'Twentieth Century Fox Film Corporation'",
+        "Answer": "1977-05-25,2007-07-25,1987-06-11,1990-12-05,1990-11-20,2002-06-20,1979-05-25,2006-06-30,2004-08-12,2002-03-10,2004-05-26,2007-12-25,1996-10-31,2006-11-01,1985-03-27,1998-07-15,1988-07-15,1997-11-18,1996-06-25,2004-02-25,1969-09-23,1986-07-18,2001-10-19,1990-11-09,1992-11-19,1993-11-24,1976-06-06,2001-03-09,1998-06-19,2001-07-25,1961-09-25,1971-10-09,2005-05-03,1999-02-19,2007-06-20,1995-05-19,1990-07-02,2006-10-20,2007-11-21,2000-10-19,1994-06-09,1997-06-13,1970-05-01,1971-05-20,1972-06-29,1973-06-15,2003-12-10,1980-05-17,1983-05-23,2007-06-13,2004-07-15,2009-04-28,2000-06-22,2001-07-06,1988-06-03,2006-12-14,2000-07-21,1966-07-30,1989-08-09,1974-12-15,1998-06-22,2002-07-12,2000-11-02,1970-07-17,2006-04-19,1995-04-21,2008-11-18,1986-05-30,2000-06-16,2006-09-01,2001-11-17,1992-05-22,1997-11-12,1963-06-12,2000-12-22,2003-11-14,2008-06-11,2008-02-18,2003-07-11,2008-07-24,2000-12-15,2004-06-10,2006-10-13,2008-05-07,1996-02-09,1996-11-15,1962-09-25,2005-08-02,1997-08-13,1981-05-15,1997-11-20,1998-05-15,1998-07-31,2004-06-18,2006-06-15,1990-07-11,1996-10-04,2000-05-31,2003-09-05,2005-12-21,1998-05-29,2007-01-25,1998-11-06,2001-11-01,2006-01-06,2005-01-13,2007-02-23,1981-06-12,2008-12-10,1999-03-16,2009-10-23,1997-04-25,1992-03-13,1992-12-25,2000-04-27,1987-12-10,2001-09-21,2001-06-22,1985-10-03,2003-12-24,2005-01-27,1970-01-26,1970-01-25,1994-07-01,2008-07-08,2001-11-21,2002-04-03,2006-01-26,2007-08-31,2004-12-17,2002-01-25,1988-08-12,2003-01-09,1996-08-02,1977-12-25,2006-09-01,2006-10-20,2009-04-01,1999-10-01,2004-12-12,1965-03-02,2009-02-27,2004-09-03,1979-11-07,2004-02-24,1979-12-20,1998-04-17,1999-08-13,2005-02-18,2009-05-20,2009-12-10,1953-01-21,2001-03-12,2002-09-06,2009-07-31,1999-11-12,2002-07-03,2001-02-23,1982-12-08,1954-08-25,1977-09-10,1945-08-29,1953-09-16,1998-08-14,1947-11-11,2010-09-02,2010-07-03,2010-04-08,1952-03-14,2000-07-13,2003-04-24,2006-05-24,1994-07-14,2010-06-15,2011-02-16,2010-06-04,2010-12-25,1956-11-15,1977-10-02,1998-03-26,1941-10-28,1938-05-24,2010-11-04,2016-06-22,2013-02-06,2011-05-24,2011-12-09,2011-06-17,1940-01-19,2011-08-03,2011-08-11,2012-05-30,2012-06-20,2012-01-19,2012-11-09,2011-12-22,2013-07-23,2012-02-01,2014-01-08,2012-07-26,2012-09-27,2012-12-25,1998-01-01,2013-06-07,2013-12-18,2014-05-15,2013-06-27,2016-01-23,2015-08-05,2014-12-17,2014-04-16,2014-08-13,2014-09-10,2014-10-01,2015-11-10,2015-03-18,2014-10-01,2016-05-18,2014-12-16,2015-09-30,2016-02-09"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the language ID of the movie \"Walk the Line\"?",
+        "evidence": "movie \"Walk the Line\" refers to title = 'Walk the Line'",
+        "SQL": "SELECT T2.language_id FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id WHERE T1.title = 'Walk the Line'",
+        "Answer": "24574,24588,24574"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Find out the language ID of the movie with the highest popularity.",
+        "evidence": "highest popularity refers to max(popularity)",
+        "SQL": "SELECT T2.language_id FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id ORDER BY T1.popularity DESC LIMIT 1",
+        "Answer": "24574"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Tell the language of the movie \"C'era una volta il West\".",
+        "evidence": "language refers to language_name; movie \"C'era una volta il West\" refers to title = 'C''era una volta il West'",
+        "SQL": "SELECT T3.language_name FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T1.title LIKE 'C%era una volta il West'",
+        "Answer": "English,Italiano"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Are there any post-production movies in Nederlands?",
+        "evidence": "post-production movies refers to movie_status = 'Post Production'; Nederlands refers to language_name = 'Nederlands';",
+        "SQL": "SELECT DISTINCT CASE WHEN T1.movie_status = 'Post Production' THEN 'YES' ELSE 'NO' END AS YORN FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Nederlands'",
+        "Answer": "NO"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "List down the tagline of the Polski movies.",
+        "evidence": "Polski movies refers to language_name = 'Polski'",
+        "SQL": "SELECT DISTINCT T1.tagline FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Polski'",
+        "Answer": "The funny, touching and totally irresistible story of a working relationship that became a 25-year friendship.,Whoever saves one life, saves the world entire.,Every book has a life of its own.,She didn't believe in angels until she fell in love with one.,Americans...they have no imagination.,,Love stings,Each year, more than 1,000,000 people are trafficked across international borders... against their will.,Out of the sky comes the screen's most incredible spectacle of men and war!,He will save the future.,You thought it was just a story.,Everybody loved him... Everybody disappeared.,A hitman and a salesman walk into a bar...,You are now infected.,Welcome to the slammer,Heads You Live... Tails You Die.,The hunt never tasted so sweet.,They swore nothing would come between them. Then evil walked in the door,The story of a man who wanted to keep the world safe for democracy...and meet girls.,Life offers you a thousand chances ... all you have to do is take one.,The only thing greater than their passion for America... was their passion for each other.,Terror has evolved.,A Comedy About The Game of Love.,For the women of Europe... The price of love just got a lot cheaper.,His house. His rules. Some in-laws were made to be broken.,The dead shall inherit the Earth.,Sleeps Six Bloody Comfortably,Imagine if Your Toaster Went on a Journey of its Own!,Ask not what your C.E.O. can do for you, but what you can do for your C.E.O.,They've got a long way to go,John met the woman of his dreams. Then he met her son ...,You can close your eyes. You can turn away. But you will never forget.,Pray That You Drown First,Life is the most spectacular show on earth.,He's Been Everywhere Mate.,There Are No Small Actors. Just Small Parts.,The lie is spreading.,A Comedy That Never Takes Its Foot Off The Gas"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Provide the homepage of the Bahasa Indonesia movies.",
+        "evidence": "Bahasa Indonesia movies refers to language_name = 'Bahasa indonesia'",
+        "SQL": "SELECT DISTINCT T1.homepage FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Bahasa indonesia'",
+        "Answer": "http://www.sonyclassics.com/theraid/,http://theactofkilling.com/"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Work out the difference in revenues made between the English and Latin movies.",
+        "evidence": "English refers to language_name = 'English'; Latin refers to language_name = 'Latin'; difference in revenues = subtract(sum(movie_id) when language_name = 'English', sum(movie_id) when language_name = 'Latin')",
+        "SQL": "SELECT SUM(CASE WHEN T3.language_name = 'English' THEN T1.revenue ELSE 0 END) - SUM(CASE WHEN T3.language_name = 'Latin' THEN T1.revenue ELSE 0 END) AS DIFFERENCE FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id",
+        "Answer": "761457885176"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "Calculate the revenues made by Fantasy Films and Live Entertainment.",
+        "evidence": "made by Fantasy Films refers to company_name = 'Fantasy Films'; Live Entertainment refers to company_name = 'Live Entertainment'",
+        "SQL": "SELECT SUM(T3.revenue) FROM production_company AS T1 INNER JOIN movie_company AS T2 ON T1.company_id = T2.company_id INNER JOIN movie AS T3 ON T2.movie_id = T3.movie_id WHERE T1.company_name IN ('Fantasy Films', 'Live Entertainment')",
+        "Answer": "124061243"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the average revenue made by Latin movies?",
+        "evidence": "Latin movies refers to language_name = 'Latin'; average revenue = AVG(revenue)",
+        "SQL": "SELECT AVG(T1.revenue) FROM movie AS T1 INNER JOIN movie_languages AS T2 ON T1.movie_id = T2.movie_id INNER JOIN language AS T3 ON T2.language_id = T3.language_id WHERE T3.language_name = 'Latin'",
+        "Answer": "138166823.8846154"
+    },
+    {
+        "db_id": "movies_4",
+        "question": "What is the most common first name?",
+        "evidence": "most common first name refers to max(count(person_name))",
+        "SQL": "SELECT person_name FROM person GROUP BY person_name ORDER BY COUNT(person_name) DESC LIMIT 1",
+        "Answer": "David Lee"
     }
 ]

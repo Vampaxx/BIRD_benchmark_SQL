@@ -15,9 +15,12 @@ class DataProcessingPipeline:
         try:
             manager                 = ConfigurationManager()
             model_config            = manager.get_database_and_model_config()
+            data_splitting_config   = manager.get_data_splitting_config()
             data_processing_config  = manager.get_data_processing_config()
-            data_processing         = DataProcessing(processing_config  = data_processing_config,
-                                                        model_config       = model_config)
+
+            data_processing         = DataProcessing(processing_config      = data_processing_config,
+                                                        model_config        = model_config,
+                                                        splitting_config    = data_splitting_config)
             data_processing.data_processing()
             example_selector        = data_processing.sematic_similarity_example_selector()
             return example_selector
