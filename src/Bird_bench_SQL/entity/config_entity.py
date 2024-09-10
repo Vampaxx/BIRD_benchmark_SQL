@@ -29,3 +29,15 @@ class DatabaseAndModelConfig:
     Model_name              : str 
     temperature             : int 
     api_key                 : Optional[str]
+
+
+@dataclass(frozen=True)
+class DataProcessingConfig:
+    data_file_path      : Path
+    train_file_path     : Path
+    test_file_path      : Path
+    few_shot_file_path  : Path
+    few_shot_file_size  : int 
+    k                   : int 
+    db_id_name          : str
+    embedding_model     : str 

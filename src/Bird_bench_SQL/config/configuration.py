@@ -5,7 +5,8 @@ from Bird_bench_SQL.constants import *
 from Bird_bench_SQL.utils.common import read_yaml, create_directories
 from Bird_bench_SQL.entity.config_entity import (DataIngestionConfig,
                                                  DataSplittingConfig,
-                                                 DatabaseAndModelConfig)
+                                                 DatabaseAndModelConfig,
+                                                 DataProcessingConfig)
                                                 #PrepareBaseModelConfig,
                                                 #PrepareCallbacksConfig,
                                                 #TrainingConfig,
@@ -49,9 +50,10 @@ class ConfigurationManager:
                                                      train_size         = params.TRAIN_SIZE,
                                                      test_size          = params.TEST_SIZE) 
         return data_procesing_config
+    
 
     def get_database_and_model_config(self) -> DatabaseAndModelConfig:
-        config =  self.config.database_and_model
+        config = self.config.database_and_model
         params = self.params 
         
         logger.info('Database and model config initialized')
@@ -61,7 +63,25 @@ class ConfigurationManager:
                                                        temperature          = params.TEMPERATURE,
                                                        api_key              = os.getenv("GROQ_API_KEY")) 
         logger.info("database and model config finished") 
-        return data_procesing_config                
+        return data_procesing_config   
+    
+
+    def get_data_processing_config(self) -> DataProcessingConfig:
+        config =  self.config.data_processing
+        params = self.params 
+        logger.info('Data preprocessing config initialized')
+        data_procesing_config = DataProcessingConfig(data_file_path     = config.data_file_path,
+                                                     train_file_path    = config.train_file_path,
+                                                     test_file_path     = config.test_file_path,
+                                                     few_shot_file_path = config.few_shots_path,
+                                                     few_shot_file_size = params.FEW_SHOTS_SIZE,
+                                                     db_id_name         = params.db_id,
+                                                     k                  = params.K,
+                                                     embedding_model    = params.EMBEDDING_MDOEL
+                                                     )
+        logger.info('Data preprocessing config finished')
+        return data_procesing_config        
+             
     
 
 
@@ -70,7 +90,11 @@ if __name__ == "__main__":
     try:
         config                      = ConfigurationManager()
         data_processing_config      = config.get_data_splitting_config()
-        database_and_model_config   = config.get_database_and_model_config()
+        processing_config           = config.get_data_processing_config()
+        model_config                = config.get_database_and_model_config()
+
+        train_path          = processing_config.train_file_path
+        test_path           = processing_config.test_file_path
 
     except Exception as e:
         raise e
