@@ -70,8 +70,8 @@ class DataProcessing(DatabaseAndModel,):
             train_size  = int(0.7 * total_size)
 
             logger.info(f"Altered data has loaded for data spiting")
-            train_data  = specific_data[:train_size]
-            test_data   = specific_data[train_size:]
+            train_data  = alter_data[:train_size]
+            test_data   = alter_data[train_size:]
             logger.info(f"data spiting completed")
 
             save_json(path  = self.splitting_config.train_file_path,
