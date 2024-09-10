@@ -2,6 +2,7 @@ from Bird_bench_SQL import logger
 from Bird_bench_SQL.pipeline.stage_1_data_ingestion import DataIngestionPipeline
 from Bird_bench_SQL.pipeline.stage_02_data_splitting import DataSplittingPipeline
 from Bird_bench_SQL.pipeline.stage_03_database_and_model import DatabaseAndModelPipeline
+from Bird_bench_SQL.pipeline.stage_04_data_processing import DataProcessingPipeline
 
 
 
@@ -34,6 +35,18 @@ try:
     logger.info(f"<<<____stage____{STAGE_NAME}____started >>>")
     obj = DatabaseAndModelPipeline()
     llm,conn,engine = obj.main()
+    logger.info(f"<<<____stage____{STAGE_NAME}____completed \n\n===========================================>>>")
+
+except Exception as e:
+    raise e
+
+
+STAGE_NAME = "Data processing stage"
+
+try:
+    logger.info(f"<<<____stage____{STAGE_NAME}____started >>>")
+    obj = DataProcessingPipeline()
+    example_selector = obj.main()
     logger.info(f"<<<____stage____{STAGE_NAME}____completed \n\n===========================================>>>")
 
 except Exception as e:
